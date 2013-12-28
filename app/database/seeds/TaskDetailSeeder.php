@@ -8,7 +8,7 @@ class TaskDetailSeeder extends Seeder {
      */
     public function run(){         
 
-		DB::table('TaskDetail')->insert(array('taskId'=>1, 'desc'=>'hello', 'remark'=>null));
+		DB::table('TaskDetail')->insert(array('taskId'=>1, 'desc'=>'You have now reached the dashboard'));
 	}
  
 }

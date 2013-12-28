@@ -69,14 +69,23 @@ class NotiController extends BaseController{
 			$count[$j] = count($notis);	
 			if($j==$day)$notis1 = $notis;				
 			$notis = $notis0;
-		}		
-		$notis1 = array_values($resolver->notiSortType($notis1));
+		}	
+		if(count($notis1)!=0){
+			$notis1 = array_values($resolver->notiSortType($notis1));
+			$sourceId = substr($notis1[$num]->source,3);
+			$desc = $resolver->descResolver($notis1[$num]->Type, $sourceId);	
+		}
 
-		$sourceId = substr($notis1[$num]->source,3);
-		$desc = $resolver->descResolver($notis1[$num]->Type, $sourceId);		
+		$desc[0]->title='empty';
+		$desc[0]->desc = 'hey';
+		
+			
 
 		$clients = Client::where('orgId', Session::get('orgId'))
 					->select('clientId','client')->get();
+
+		// if(count($notis1)!=0){
+		// 	return View::make('partials/home')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));		
 
 		if(Input::get('num')!=null)
 			return View::make('partials/description')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));		

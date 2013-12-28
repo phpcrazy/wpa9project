@@ -9,17 +9,16 @@ class TaskSeeder extends Seeder {
     public function run(){
     	$now = date('Y-m-d H:i:s');                  
 
-        $member_id = DB::table('Member') 
-                    ->where('member', 'John')
-                    ->where('orgId', $org_id)
-                    ->pluck('memberId'); 
+        // $member_id = DB::table('Member') 
+        //             ->where('member', 'John')
+        //             ->where('orgId', $org_id)
+        //             ->pluck('memberId'); 
 
-        $priority_id = DB::table('Priority') 
-                    ->where('priority', 'Low')
-                    ->pluck('priorityId'); 
+        // $priority_id = DB::table('Priority') 
+        //             ->where('priority', 'Low')
+        //             ->pluck('priorityId'); 
 
-		DB::table('Task')->insert(array('task'=>'Testing', 'assignTo'=>$member_id, 'assignedDate'=>$now,
-			 'priorityId'=>$priority_id, 'dueDate'=>$now));
+		DB::table('Task')->insert(array('task'=>'Dummy'));
 	}
  
 }

@@ -8,16 +8,16 @@ class NotificationDetailSeeder extends Seeder {
      */
     public function run(){ 
 
-        $org_id = DB::table('Organization')                    
-                    ->where('org', 'Myanmar Links')
-                    ->pluck('orgId');  
+        // $org_id = DB::table('Organization')                    
+        //             ->where('org', 'Myanmar Links')
+        //             ->pluck('orgId');  
                     
-        $mem_id = DB::table('Member')                                
-                    ->where('member', 'John')
-                    ->where('orgId', $org_id)
-                    ->pluck('memberId');   
+        // $mem_id = DB::table('Member')                                
+        //             ->where('member', 'John')
+        //             ->where('orgId', $org_id)
+        //             ->pluck('memberId');   
 
-		DB::table('NotificationDetail')->insert(array('notiId'=>1, 'memberId'=>$mem_id));
+		DB::table('NotificationDetail')->insert(array('notiId'=>1, 'memberId'=>1));
 	}
  
 }

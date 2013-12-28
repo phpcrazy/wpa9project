@@ -18,8 +18,9 @@ class CreateNotiDetailTable extends Migration {
 			$table->integer("notiId")->unsigned();
 			$table->foreign("notiId")->references("notiId")->on("Notification");
 
-			$table->integer("notiTo")->unsigned();
-			$table->foreign("notiTo")->references("memberId")->on("Member");
+			$table->integer("notiTo")->nullable()
+                  ->default(null);
+
 		});
 	}
 
