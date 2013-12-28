@@ -36,9 +36,8 @@ class CreateNotificationTable extends Migration {
 					->nullable()
 					->default(null);
 
-			$table->integer("createdBy")->unsigned()->nullable()
+			$table->integer("createdBy")->nullable()
                   ->default(null);
-			$table->foreign("createdBy")->references("memberId")->on("Member");
 
 			$table->dateTime("createdDate")
 					->nullable()
