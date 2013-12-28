@@ -1,0 +1,57 @@
+SELECT @@event_scheduler;
+
+SET GLOBAL event_scheduler := 1;
+
+CREATE EVENT Evt_LoginStatus
+    ON SCHEDULE
+      EVERY 60 SECOND
+    DO
+      Update ProjectPM.users set loginStatus = 'false';
+
+$projects = DB::select("Select Distinct Project.projectId pId, Project.project, Project.desc, Project.startDate, Project.dueDate, 
+			Member.member, Client.client, (case 
+		when exists (select 1 from Project where Project.ProjectId=pid and Project.dueDate < date(now())) then 'Finish'
+        when not exists(select 1 from Module where projectId = pid) then 'Just Start'
+		when exists(select 1 from Module where Module.ProjectId=pid and Module.startDate is null) then 'Cancel'
+        when exists(select 1 from Module where Module.ProjectId=pid and (Module.startDate is not null and Module.dueDate is null)) then 'Pending'
+       	else 'Progress'
+		end) as 'status' from Project left join Module on Project.projectId = Module.projectId 
+		left join Member on Project.authorizedBy = Member.memberId 
+		left join Client on Project.clientId = Client.clientId where Project.projectId = ?",array($projectId));		   
+
+
+public function project_deactivate() {    
+    Project::where('Project.projectId', Input::get('projectId'))          
+          ->update(array('Project.dueDate'=>null));
+
+    Module::where('Module.projectId', Input::get('projectId'))        
+          ->where('Module.dueDate','>=',date('Y-m-d'))  
+          ->update(array('Module.dueDate'=>null));
+    
+    $moduleIds = Module::where('Module.projectId', Input::get('projectId'))
+          ->select('moduleId')->get();
+      
+    $i=0;   
+    foreach($moduleIds as $moduleId){
+      TaskList::where('TaskList.moduleId', $moduleId->moduleId)         
+          ->where('TaskList.dueDate','>=',date('Y-m-d'))  
+          ->update(array('TaskList.dueDate'=>null));  
+      $tasklistIds[$i] = TaskList::where('TaskList.moduleId', $moduleId->moduleId)
+          ->select('tasklistId')->get();
+      $i++;
+    }
+
+    for($j=0;$j<$i;$j++){
+      foreach($tasklistIds[$j] as $tasklistId){
+        Task::where('Task.tasklistId', $tasklistId->tasklistId)         
+            ->where('Task.dueDate','>=',date('Y-m-d'))  
+            ->update(array('Task.dueDate'=>null));  
+      }
+    }
+
+    return Redirect::route('project_list'); 
+  }   
+
+
+  Mdule.projectId, Mdule.project, `Mdule.desc`, Mdule.startDate,Mdule.dueDate
+    , Mdule.status, Mdule.authorizedBy    

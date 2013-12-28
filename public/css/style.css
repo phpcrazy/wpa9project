@@ -1,0 +1,607 @@
+body{
+	font-size: 13px;
+	font-family: 'Ubuntu', sans-serif;
+	max-width: 1270px;
+}
+
+h3{
+	font-size: 18px;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+h4{
+	font-size: 16px;
+	font-family: 'Ubuntu', sans-serif;
+	border-bottom: 1px solid #e3e3e3;
+	line-height: 25px;
+	padding-bottom: 5px;
+}
+
+.b-form .input-group .form-control:nth-child(1),
+.m-form .input-group .form-control:nth-child(1){
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.b-form .input-group .form-control:nth-child(2),
+.b-form .input-group .form-control:nth-child(3){
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;	
+}
+
+.input-group span.input-group-addon:nth-child(2){
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+	border-right: 0;
+}
+
+.heading{
+	text-align: center;
+	color: #fff;
+	font-size: 18px;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.inputPassword,
+.inputUsername{
+	text-transform: lowercase;
+}
+
+.form_wrapper{
+	background-color: #4C9FED;
+	border-radius: 10px;
+	padding:20px;
+	margin-top: 40px;
+	border: 1px solid #e3e3e3;		
+}
+
+.error_msg{
+	margin-top: 5px;
+	text-indent: 70px;
+	color: red;
+}
+
+.input-group{
+	margin: 20px 20px 0;
+}
+
+.place{
+	color: red;
+	padding-right: 5px;
+	display: table-cell;
+}
+
+.b-form .form-horizontal .input-group .date_picker,
+.m-form .form-horizontal .input-group .date_picker{
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;	
+}
+
+.container input.date_picker,
+.container input.date_picker{
+	cursor: pointer;
+	background-color: white;
+}
+
+#btn p{
+	margin-top: 20px;
+	text-align: center;
+}
+
+button.close{
+	margin-top: -15px;
+	margin-right: -10px;
+	font-size: 25px;
+	opacity: 0.5;
+}
+
+button.close:hover{
+	opacity: 0.8;
+}
+
+.m-form{
+	border-color: #4C9FED;
+}
+
+.txtShow{
+	width: 200px;
+}
+
+.c-form{
+	margin: 100px 250px;
+}
+
+.c-form  #main_content{
+	width: 800px;
+}
+
+.c-form .panel-body{
+	text-align: center;
+}
+
+.c-form #btn{
+	text-align: center;
+	padding-bottom: 20px;
+}
+
+.c-form #btn a{
+	width: 100px;
+	font-weight: bold;
+}
+
+.blue_text{
+	color: #5BC0DE;	
+}
+
+.green_text{
+	color:#5CB85C;
+}
+
+.orange_text{
+	color: #428BCA;
+}
+
+.red_text{
+	color:#FB053E;
+}
+
+.blue{
+	background-color: #5BC0DE;	
+}
+
+.green{
+	background-color:#5CB85C;
+}
+
+.orange{
+	background-color: #428BCA;
+}
+
+.red{
+	background-color:#FB053E;
+}
+
+#breadcrumb_wrapper{
+	margin-top: 20px;
+	height: 45px;
+}
+
+#panel_wrapper{
+	padding-right: 0;
+}
+
+#nav_wrapper{
+	height: 50px;
+}
+
+#sidebar_wrapper{
+	padding-left: 0;	
+}
+
+#sidebar_wrapper a.list-group-item:hover{
+	border-left: 5px solid #428BCA ;	
+}
+
+a.list-group-item:hover{
+	color: #428BCA;
+}
+
+#main_content_wrapper{
+	margin-top: 5px;
+	border-radius: 5px;
+}
+
+#footer{
+	height: 30px;
+	padding:5px;
+}
+
+#footer p{
+	text-align: center;
+}
+
+/* Start Login Form */
+
+#login .input-group{
+	margin: 20px 20px 0;
+}
+
+#login #login_options{
+	padding-left: 40px;
+}
+
+#login #login_options label{
+	color: #333;
+}
+
+#login #login_options .checkbox{
+	padding-top: 0;
+}
+
+#login #btn p{
+	color: #797979;
+	padding-left: 35px;
+}
+
+#login a{
+	color: blue;
+	text-decoration: underline;
+}
+
+/* End Login Form */
+
+/* Start Register Form */
+
+#register{
+	margin-left: 230px;
+}
+
+#register .input-group{
+	margin: 5px 0 0 0;
+}
+
+#register .input-controls{
+	margin-top: 10px;
+}
+
+#register .input-controls:nth-child(7){
+	margin-top: 20px;
+}
+
+#register .error_msg{
+	text-indent: 30px;
+}
+
+#register #photo_warn{
+	color: red;
+	margin-left: 10px;
+}
+
+#register #photo_control{
+	margin-top: 50px;
+	float: left;
+}
+
+#register #uploadPhoto{
+	display: none;
+}
+
+#register #userPhoto{
+	/*display: none;*/
+	margin: 20px 20px 10px 240px;
+	outline: none;
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+
+#register #inputFile{
+	margin-left: 10px;
+}
+
+#register #inputFile .controls{
+	width: 80px;
+	float:left;
+}
+
+/* End Register Form */
+
+/* Start add_client Form */
+
+#add_client .input-group{
+	margin-top: 20px;
+}
+
+#add_client .error_msg{
+	text-indent: 80px;
+}
+
+/* End  add_client Form */
+
+/* Start Organization Panel */
+
+#org .input-group{
+	margin-top: 20px;
+}
+
+#org #btn p{
+	text-align: center;
+}
+
+/* End Organization.php */
+
+/* start add_project.php */
+
+#add_project select{
+	width: 286px;
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+/* end of add_project.php */
+
+/* start add_module.php */
+
+#add_module .input-group{
+	margin-top: 20px;
+}
+
+#add_module .error_msg{
+	text-indent: 50px;
+}
+
+/* end of add_module.php */
+
+/* start add_tasklist.php */
+
+#add_tasklist .input-group{
+	margin-top: 20px;
+}
+
+#add_tasklist .error_msg{
+	text-indent: 50px;
+}
+
+/* end of add_tasklist.php */
+
+#task_form .input-group{
+	margin: 0 !important;
+}
+
+#task_form{
+	padding-top: 20px;
+}
+.addmargin{
+	margin-top: 20px;
+}
+
+
+/* start member_list.php */
+
+#member_list .place{
+	display: inline;
+}
+
+#member_list .btn_action .place{
+	margin-right: 23px;
+}
+
+#member_list .mem_role{
+	padding-left: 0;
+}
+
+#member_list .cbo_role{
+	width: 165px;
+}
+
+/* end member_list.php */
+
+/* start project_list.php */
+
+#project_list .proj_line:not(:nth-child(2)){
+	margin-top: 15px;
+}
+
+#project_list .proj_options a{	
+	padding-right: 2px;
+	padding-left: 4px;
+	border-right: 2px solid #399BE0;
+	cursor: pointer;
+}
+
+#project_list .proj_options a:first-child{	
+	padding-left: 0;
+}
+
+#project_list .proj_options a:last-child{	
+	border-right: 0;
+}
+
+#project_list .proj_line .cboClient,
+#project_list .proj_line .cboMember{	
+	display: inline;
+	width: 200px;
+}
+
+#project_list .proj_line .cboMember{	
+	margin-left: 20px;	
+}
+
+/* end project_list.php */
+
+/* start member_detail.php */
+
+#member_detail .proj_line:not(:nth-child(2)){
+	margin-top: 15px;
+}
+
+#member_detail .textclear{
+	line-height: 30px;	
+	font-size: 14px;
+}
+
+#member_detail #photo_warn{
+	color: red;
+	margin-left: 10px;
+}
+
+#member_detail #photo_control{
+	margin-top: 50px;
+	float: left;
+	width: 70px;
+	margin-left: -20px;
+}
+
+#member_detail #uploadPhoto{
+	display: none;
+}
+
+#member_detail p.error_msg{
+	text-indent: 50px;
+}
+
+/* end member_detail.php */
+
+/* start project_detail.php */
+
+#project_detail #projectSection .text-right{
+	width: 13%;
+	padding-left: 0;
+}
+
+#project_detail .panel-body p{
+	margin-bottom: 20px;
+}
+
+#project_detail .lblHide{
+	padding-left: 0;
+}
+
+#project_detail #eventSection .pagination{
+	margin-top: 0;
+}
+
+#project_detail #eventSection .perPage{	
+	float: right;
+}
+
+/*#project_detail #eventSection .perPage:nth-child(4){	
+	width: 35px;
+}*/
+
+#project_detail #eventSection #txtPerPage{	
+	width: 35px;
+	font-size: 12px;
+	padding: 5px;
+	text-align: center;
+}
+
+#project_detail #eventSection .perPage p{	
+	margin-top: 5px;
+	margin-right: 10px;
+}
+
+/* end project_detail.php */
+
+/* start module_detail.php */
+
+#module_detail #moduleSection .text-right{
+	width: 13%;
+	padding-left: 0;
+}
+
+#module_detail .panel-body p{
+	margin-bottom: 20px;
+}
+
+#module_detail .lblHide{
+	padding-left: 0;
+}
+
+/* end module_detail.php */
+
+/* start tasklist_detail.php */
+
+#tasklist_detail{
+	max-width: 1200px;
+	padding-right: 0;
+	padding-left: 20px;
+}
+
+#tasklist_detail #main_content{
+	width: 55%;
+}
+
+#tasklist_detail .panel-body p{
+	margin-bottom: 20px;
+}
+
+#tasklist_detail .lblHide{
+	padding-left: 0;
+}
+
+#tasklist_detail #tasklistSection .text-right{
+	width: 17%;
+	padding-left: 0;
+}
+
+#tasklist_detail .lkTask{
+	cursor: pointer;
+}
+
+#tasklist_detail .trTaskDetail{
+	background-color: #eeeeee;
+}
+
+#tasklist_detail .table-hover > tbody > .trTaskDetail:hover td{
+	background-color: #eeeeee;
+}
+
+#tasklist_detail .trTaskDetail .lblDesc{
+	width: 220px;
+	margin-bottom: 0;
+}
+
+#tasklist_detail #taskSection .lblStatus.label-start{
+	background-color: white;
+	border: 1px solid #999999;
+	color: black;
+}
+
+#tasklist_detail #task_area{
+	padding-right: 0;
+	width: 28%;
+}
+
+#tasklist_detail #add_task .input-group{
+	margin: 20px 0 0 0;
+}
+
+#tasklist_detail #add_task .control-label{
+	vertical-align: middle;
+	padding-top: 0;
+	display: table-cell;
+	width: 75px;
+}
+
+#tasklist_detail #add_task .place{
+	padding-left: 5px;
+	padding-right: 20px;
+	vertical-align: middle;
+}
+
+#tasklist_detail #add_task #btn input[type='button']{
+	width: 110px;
+}
+
+#tasklist_detail #add_task select.form-control{
+	width: 185px;
+}
+
+#tasklist_detail #add_task .error_msg{
+	text-indent: 0px;
+	margin-left: 106px;
+}
+
+/* end tasklist_detail.php */
+
+/* start home.php */
+
+#dashboard #add_area{
+  	margin-bottom: 10px;
+
+}
+
+#dashboard #noti_area .noti_detail .noti_format{
+	padding:15px;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+#dashboard #description_area {
+  left: 735px;
+  padding-right: 0;
+  position: fixed;
+  width: 486px;
+}
+
+/* end home.php */
