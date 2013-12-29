@@ -20,12 +20,12 @@ class DatabaseSeeder extends Seeder {
 		// $this->call('TaskListSeeder');
 		$this->call('PrioritySeeder');
 		$this->call('StatusSeeder');
-		$this->call('TaskSeeder');
-		$this->call('TaskDetailSeeder');
+		// $this->call('TaskSeeder');
+		// $this->call('TaskDetailSeeder');
 		$this->call('NotiTypeSeeder');
 		$this->call('NotiMessageSeeder');
-		$this->call('NotificationSeeder');
-		$this->call('NotificationDetailSeeder');
+		// $this->call('NotificationSeeder');
+		// $this->call('NotificationDetailSeeder');
 	}
 }
 

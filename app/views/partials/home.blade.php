@@ -54,7 +54,7 @@
 												<?php $date0 = date('d-M-Y') ?>
 												<span class="hidden">{{$date0}}</span>
 												<strong>Today</strong>
-												<span class="badge pull-right">{{count($notis)}}</span>
+												<span class="badge pull-right">{{$count[0]}}</span>
 											</a>
 										</div>
 										<div class="accordion-body collapse in noti_detail">

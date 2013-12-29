@@ -1,6 +1,9 @@
 	<div class="accordion-inner">	
-	<?php $i=0; ?>
-	@foreach($notis as $noti)												
+	<?php
+	if($notis[0]!='empty'){
+		$i=0;
+	?>
+		@foreach($notis as $noti)												
 		<div class="noti_format">
 			<p>
 				<span class="hide">{{$noti->notiTypeId}}</span>
@@ -9,8 +12,9 @@
 			</p>
 			<span class='hide'>{{$i}}</span>
 		</div>
-	<?php $i++ ?>
-	@endforeach
+		<?php $i++ ?>
+		@endforeach
+	<?php }	?>
 	</div>
 
 <script>

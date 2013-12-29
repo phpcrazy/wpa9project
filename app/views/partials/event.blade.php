@@ -1,4 +1,3 @@
-
 		<h4 class="red_text">Events on {{$projects[0]->project}}</h4>
 		<table class="table table-hover">
 		 <thead>

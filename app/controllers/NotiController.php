@@ -74,18 +74,16 @@ class NotiController extends BaseController{
 			$notis1 = array_values($resolver->notiSortType($notis1));
 			$sourceId = substr($notis1[$num]->source,3);
 			$desc = $resolver->descResolver($notis1[$num]->Type, $sourceId);	
+		}		
+		else{
+			$notis1 = new Illuminate\Database\Eloquent\Collection;
+			$notis1[0] = 'empty';
+			$desc = new Illuminate\Database\Eloquent\Collection;
+			$desc[0] = 'empty';
 		}
 
-		$desc[0]->title='empty';
-		$desc[0]->desc = 'hey';
-		
-			
-
 		$clients = Client::where('orgId', Session::get('orgId'))
-					->select('clientId','client')->get();
-
-		// if(count($notis1)!=0){
-		// 	return View::make('partials/home')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));		
+					->select('clientId','client')->get();		
 
 		if(Input::get('num')!=null)
 			return View::make('partials/description')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));		
