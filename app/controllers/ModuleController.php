@@ -23,6 +23,10 @@ class ModuleController extends BaseController{
 			'projectId'			=> $projectId
 		));
 
+		if(count(Module::where('Project.orgId',Session::get('orgId'))->join('Project','Module.projectId','=','Project.projectId')->where('Module.projectId',$projectId)->select('ModuleId')->get())==1){
+        	Module::where('moduleId',$moduleId)->update(array('active'=>1));
+        }
+
 		Project::where('projectId',$projectId)->update(array('status'=>'Progress'));
 
 		$now = date('Y-m-d H:i:s');
@@ -82,7 +86,9 @@ class ModuleController extends BaseController{
 					on Task.taskId = TaskDetail.taskId where statusId = 7 group by tasklistId) Status
 			on Tlist.tasklistId = Status.tasklistId) Upper 
 				inner join 
-					( select tasklistId, count(1) total from Task group by tasklistId) Lower 
+					( select Task.tasklistId, count(1) total from Task join 
+						( TaskDetail join Status on TaskDetail.statusId = Status.statusId )
+					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId ) Lower 
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress
 	on TaskList.tasklistId = Progress.tasklistId where Module.moduleId = ? group by Module.moduleId", array($moduleId));
@@ -103,7 +109,9 @@ class ModuleController extends BaseController{
 					on Task.taskId = TaskDetail.taskId where statusId = 7 group by tasklistId) Status
 			on Tlist.tasklistId = Status.tasklistId) Upper 
 				inner join 
-					( select tasklistId, count(1) total from Task group by tasklistId) Lower 
+					( select Task.tasklistId, count(1) total from Task join 
+						( TaskDetail join Status on TaskDetail.statusId = Status.statusId )
+					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId ) Lower 
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress 
 	on TaskList.tasklistId = Progress.tasklistId where Module.moduleId = ? and TaskList.status <> 'Delete'", array($moduleId));
@@ -158,7 +166,16 @@ class ModuleController extends BaseController{
 		$url = '/project_detail/?projectId=' . $projectId . '#projectSection';	
 
 		Module::where('Module.moduleId', $moduleId)					
-			->update(array('Module.status'=>'Delete'));		
+			->update(array('Module.status'=>'Delete','Module.active'=>0));		
+
+		if(count(Module::where('projectId',$projectId)->where('active',1)->select('moduleId')->get())==0&&
+		   count(Module::where('projectId',$projectId)->where('status','!=','Delete')->select('moduleId')->get())>0){			
+			$temp = Module::where('projectId',$projectId)
+				->whereNotIn('status',array('Delete','Finish'))
+				->select('moduleId')->orderBy('moduleId')->get()[0]->moduleId;
+
+			Module::where('moduleId',$temp)->update(array('active'=>1));
+		}
 
 		TaskList::where('TaskList.moduleId', $moduleId)						
 				->update(array('TaskList.status'=>'Delete'));

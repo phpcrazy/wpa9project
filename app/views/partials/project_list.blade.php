@@ -17,6 +17,7 @@
 					<div  id="panel_wrapper" class="col-md-12">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
+								<span class="hide">Projects</span>
 								<h3 class="panel-title">Projects in {{ $org }}</h3>
 							</div>
 							<div class="panel-body">

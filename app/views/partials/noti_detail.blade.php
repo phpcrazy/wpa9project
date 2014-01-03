@@ -1,6 +1,6 @@
 	<div class="accordion-inner">	
 	<?php
-	if($notis[0]!='empty'){
+	if(isset($notis)){
 		$i=0;
 	?>
 		@foreach($notis as $noti)												
@@ -19,10 +19,8 @@
 
 <script>
 	$(document).ready(function(){
-
-
 		$('#noti_area .hidden').hide();
-		$('#noti_area .noti-heading').click(function(){
+		$('#noti_area .heading_link').click(function(){
 			$('.accordion-group button span').attr('class', 'glyphicon glyphicon-plus');
 			var tmp = $(this).closest('.accordion-group');
 			tmp.find('button span').attr('class', 'glyphicon glyphicon-minus');			

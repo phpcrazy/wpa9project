@@ -1,4 +1,9 @@
 @section('confirm_task_delete')
+
+@if(!isset($num))
+	<?php $num = 0;	?>
+@endif
+
 	<div class="container c-form">						
 		<div id="main_content_wrapper" class="row">				
 			<div id="main_content" class="col-md-10">
@@ -16,6 +21,10 @@
 									'class'			=> 'form-horizontal'
 									))
 								}}
+								{{ Form::hidden('source','', array("class" => 'form-control txtSource'
+								)) }}
+								{{ Form::hidden('num',$num, array("class" => 'form-control txtNum'
+								)) }}
 								{{ Form::hidden('tasklistId',0, array("class" => 'form-control','id'=>'txtTaskListId'
 								)) }}		
 								{{ Form::hidden('taskId',0, array("class" => 'form-control','id'=>'txtTaskId'

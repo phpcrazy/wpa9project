@@ -42,6 +42,16 @@ h4{
 	font-family: 'Ubuntu', sans-serif;
 }
 
+.link{
+	cursor: pointer;
+}
+
+.label-start{
+	background-color: white;
+	border: 1px solid #999999;
+	color: black;
+}
+
 .inputPassword,
 .inputUsername{
 	text-transform: lowercase;
@@ -525,10 +535,6 @@ a.list-group-item:hover{
 	padding-left: 0;
 }
 
-#tasklist_detail .lkTask{
-	cursor: pointer;
-}
-
 #tasklist_detail .trTaskDetail{
 	background-color: #eeeeee;
 }
@@ -540,12 +546,6 @@ a.list-group-item:hover{
 #tasklist_detail .trTaskDetail .lblDesc{
 	width: 220px;
 	margin-bottom: 0;
-}
-
-#tasklist_detail #taskSection .lblStatus.label-start{
-	background-color: white;
-	border: 1px solid #999999;
-	color: black;
 }
 
 #tasklist_detail #task_area{
@@ -602,6 +602,70 @@ a.list-group-item:hover{
   padding-right: 0;
   position: fixed;
   width: 486px;
+}
+
+/* end home.php */
+
+/* start workarea.php */
+
+#workarea{
+	max-width: 1200px;
+	padding-right: 0;
+	padding-left: 20px;
+}
+
+#workarea #main_content{
+	width: 55%;
+}
+
+#workarea h4{
+  	margin-top: 0;
+	border-bottom: 0;
+}
+
+#workarea h4 span{  
+	padding-bottom: 5px;	
+	border-bottom: 1px solid #E3E3E3;	
+}
+
+#workarea #main_content{
+	padding-right: 0;
+}
+
+#workarea #task_area{
+	padding-right: 0;
+	width: 28%;
+	float: right;
+}
+
+#workarea #add_task .input-group{
+	margin: 20px 0 0 0;
+}
+
+#workarea #add_task .control-label{
+	vertical-align: middle;
+	padding-top: 0;
+	display: table-cell;
+	width: 75px;
+}
+
+#workarea #add_task .place{
+	padding-left: 5px;
+	padding-right: 20px;
+	vertical-align: middle;
+}
+
+#workarea #add_task #btn input[type='button']{
+	width: 110px;
+}
+
+#workarea #add_task select.form-control{
+	width: 185px;
+}
+
+#workarea #add_task .error_msg{
+	text-indent: 0px;
+	margin-left: 106px;
 }
 
 /* end home.php */

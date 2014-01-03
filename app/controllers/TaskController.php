@@ -2,8 +2,14 @@
 
 class TaskController extends BaseController{
 	public function task_add(){
+		$num = Input::get('num');
 		$tasklistId = Input::get('tasklistId');
-		$url = '/tasklist_detail/?tasklistId=' . $tasklistId . '#tasklistSection';
+		
+		if(Input::get('source')=='workarea')
+			$url = '/workarea/?num=' . $num;
+
+		else if(Input::get('source')=='tasklist_detail')
+			$url = '/tasklist_detail/?tasklistId=' . $tasklistId . '#tasklistSection';
 
 		$validator = Validator::make(Input::all(), Config::get('validation.task'));
 
@@ -95,10 +101,16 @@ class TaskController extends BaseController{
 		return Redirect::to($url);					
 	}	
 
-	public function task_update() {				
+	public function task_update() {	
+		$num = Input::get('num');			
 		$tasklistId = Input::get('tasklistId');		
 		$validator = Validator::make(Input::all(), Config::get('validation.task'));	
-		$url = '/tasklist_detail/?tasklistId=' . $tasklistId;	
+
+		if(Input::get('source')=='workarea')
+			$url = '/workarea/?num=' . $num;
+
+		else if(Input::get('source')=='tasklist_detail')
+			$url = '/tasklist_detail/?tasklistId=' . $tasklistId;	
 
 		if ($validator->fails()){			
 			return Redirect::to($url)->withInput()->withErrors($validator);	
@@ -127,28 +139,19 @@ class TaskController extends BaseController{
 
 		$now = date('Y-m-d H:i:s');
 
-		$notiId = Notification::insertGetId(array(
-			'orgId'				=> Session::get('orgId'),
-			'source'			=> 'tsk' . $taskId,
-			'messageId'			=> 8,
-			'dateToNoti'		=> $now,
-			'createdDate'		=> $now,
-			'createdBy'			=> Session::get('memberId')
-		));
-
-		NotiDetail::insert(array(
-			'notiId'			=> $notiId,
-			'notiTo'			=> Session::get('memberId')
-		));
-
 		return Redirect::to($url);
 	}
 
-	public function task_delete() {		
+	public function task_delete() {	
+		$num = Input::get('num');	
 		$tasklistId = Input::get('tasklistId');		
 		$taskId = Input::get('taskId');
 
-		$url = '/tasklist_detail/?tasklistId=' . $tasklistId . '#tasklistSection';			
+		if(Input::get('source')=='workarea')
+			$url = '/workarea/?num=' . $num;
+
+		else if(Input::get('source')=='tasklist_detail')
+			$url = '/tasklist_detail/?tasklistId=' . $tasklistId . '#tasklistSection';			
 		
 		$statusId = Status::where('Status.status','Delete')->pluck('statusId');
 
@@ -171,6 +174,64 @@ class TaskController extends BaseController{
 		));			
 
 		return Redirect::to($url);
+	}
+
+	public function workarea(){
+		if(Input::get('num')==null)
+			$num = 0;
+		else
+			$num = Input::get('num');
+
+		if(Input::get('projectId')==null){
+			if(count(Project::where('authorizedBy',Session::get('memberId'))
+				->whereNotIn('status',array('Finished','Cancel','Pending'))
+				->select('projectId')->orderBy('projectId')->get())==0)
+				return View::make('partials/workarea');		
+			
+			$para["project"] = Project::where('authorizedBy',Session::get('memberId'))
+				->whereNotIn('status',array('Finished','Cancel','Pending'))
+				->select('projectId','project')->orderBy('projectId')->get()[0];
+		}
+				
+		else
+			$para["project"] = array('projectId'=>Input::get('projectId')
+				,'project'=>Project::where('projectId',Input::get('projectId'))->pluck('project'));						
+
+		if(count(Module::where('projectId',$para["project"]["projectId"])
+			->where('active',1)->select('moduleId')->get())==0)
+			return View::make('partials/workarea')->with(array('para'=>$para));
+
+		$para["module"] = Module::where('active',1)->where('projectId',$para["project"]["projectId"])->select('moduleId','module')->get()[0];		
+
+		if(count(TaskList::where('moduleId',$para["module"]["moduleId"])->where('status','!=','Delete')
+			->select('tasklistId')->get())==0)
+			return View::make('partials/workarea')->with(array('para'=>$para));
+
+		$para["tasklist"] = TaskList::where('moduleId',$para["module"]["moduleId"])->where('status','!=','Delete')
+						->select('tasklistId','tasklist')->orderBy('tasklistId')->get();		
+
+		$i=0;
+		foreach($para["tasklist"] as $tasklist){		
+			$para["task"][$i] = DB::select("select Task.taskId, Task.task, Task.startDate, Task.dueDate, Member.member, 
+							Priority.priority, TaskDetail.desc, Status.status, TaskDetail.remark from Task left join 
+				( TaskDetail left join Status on TaskDetail.statusId = Status.statusId ) on Task.taskId = TaskDetail.taskId 
+				left join Member on Task.assignTo = Member.memberId left join Priority on Task.priorityId = Priority.priorityId 
+				where Task.tasklistId = ? and Status.status <> 'Delete'", array($tasklist->tasklistId));
+
+			$i++;
+		}
+
+		$para["member"] = DB::select("Select Member.memberId, Member.member from Member left join 
+			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
+			on users.id = users_groups.user_id) on Member.memberId = users.memberId 
+			where Member.orgId = ? and groups.name = 'Member' order by users_groups.group_id",array(Session::get('orgId')));
+
+		$para["priority"] = Priority::select('Priority.priorityId', 'Priority.priority')->get();
+
+		if(Input::get('source')=='task_detail')
+			return View::make('partials/task_detail')->with(array('para'=>$para, 'num'=>$num));	
+		
+		return View::make('partials/workarea')->with(array('para'=>$para, 'num'=>$num));
 	}
 }
 ?>

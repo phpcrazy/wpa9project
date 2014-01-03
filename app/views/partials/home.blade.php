@@ -39,6 +39,7 @@
 					<div id="noti_area" class="col-md-6">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
+						   		<span class="hide">Dashboard</span>
 								<h3 class="panel-title"><i class='glyphicon glyphicon-bell'></i> Notifications</h3>
 							</div>
 
@@ -54,7 +55,9 @@
 												<?php $date0 = date('d-M-Y') ?>
 												<span class="hidden">{{$date0}}</span>
 												<strong>Today</strong>
+												@if(isset($count))
 												<span class="badge pull-right">{{$count[0]}}</span>
+												@endif
 											</a>
 										</div>
 										<div class="accordion-body collapse in noti_detail">
@@ -71,13 +74,15 @@
 									<!--- other noti -->
 									<div class="accordion-group">
 										<div class="accordion-heading">
-											<a class="accordion-toggle list-group-item noti-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse_two">
+											<a class="accordion-toggle list-group-item heading_link" data-toggle="collapse" data-parent="#accordion" href="#collapse_two">
 												<button class="btn btn-primary btn-xs">
 													<span class="glyphicon glyphicon-plus"></span>
 												</button>
 												<span class="hidden">{{$date2}}</span>
 												<strong>{{$date1}}</strong>
-												<span class="badge pull-right">{{$count[$i]}}</span>
+												@if(isset($count))
+													<span class="badge pull-right">{{$count[$i]}}</span>
+												@endif
 											</a>
 										</div>
 										<div class="accordion-body collapse in noti_detail">

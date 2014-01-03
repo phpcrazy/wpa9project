@@ -1,5 +1,9 @@
 @section('add_task')
 
+@if(!isset($num))
+	<?php $num = 0;	?>
+@endif
+
 	<div id="add_task" class="panel panel-primary b-form">
 		<div class="panel-heading">
 			<h5 class="panel-title heading"><i class='glyphicon glyphicon-edit'></i><span> Task Registration Form</span></h5>
@@ -12,8 +16,12 @@
 				'autocomplete'	=> 'off',
 				'class'			=> 'form-horizontal',					
 				'name'			=> 'task'))
-			}}			 	
-			{{ Form::hidden('tasklistId',$tasklists[0]->tasklistId, array("class" => 'form-control', 'id'=>'txtTaskListId'
+			}}
+			{{ Form::hidden('source','', array("class" => 'form-control txtSource'
+			)) }}
+			{{ Form::hidden('num',$num, array("class" => 'form-control txtNum'
+			)) }}			 	
+			{{ Form::hidden('tasklistId',$para['tasklist'][$num]->tasklistId, array("class" => 'form-control', 'id'=>'txtTaskListId'
 			)) }}
 			{{ Form::hidden('taskId',Input::old('taskId'), array("class" => 'form-control', 'id' => 'txtTaskId'
 			)) }}
@@ -47,7 +55,7 @@
 				<span class='place'>&nbsp;&nbsp;</span></span>
 				<select class="form-control" name="member" id="cboAssignTo">
 					<option>Please Choose</option>	
-					@foreach($members as $member)
+					@foreach($para['member'] as $member)
 						@if(Session::hasOldInput('member'))
 							@if(Input::old('member')==$member->memberId)								
 								<option selected="true" value="{{$member->memberId}}">{{ $member->member }}</option>								
@@ -68,7 +76,7 @@
 				  		array("class"=>'form-control date_picker',
 				  			   "data-date-format"=>'dd-MM-yyyy', 
 				  			   "placeholder"=>'Pick Start Date',
-				  			   "id" => "cboStartDate", 'readonly'))
+				  			   "id" => "StartDate", 'readonly'))
 				  }}
 				  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 			</div>
@@ -87,7 +95,7 @@
 							array("class"=>'form-control date_picker', 
 							"data-date-format"=>'dd-MM-yyyy', 
 							"placeholder"=>'Pick Due Date',
-							"id"=>"cboDueDate", 'readonly'))
+							"id"=>"DueDate", 'readonly'))
 					}}
 					<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 			</div>
@@ -103,7 +111,7 @@
 				<label class="control-label">Priority </label>
 				<span class='place'>&nbsp;&nbsp;</span></span>
 				<select class="form-control" name="priority" id="cboPriority">
-					@foreach($prioritys as $priority)
+					@foreach($para['priority'] as $priority)
 						@if(Session::hasOldInput('priority'))
 							@if(Input::old('priority')==$priority->priorityId)								
 								<option selected="true" value="{{$priority->priorityId}}">{{ $priority->priority }}</option>
@@ -119,13 +127,8 @@
 				
 			<div id="btn" class="col-md-12">
 				<p>
-					@if(Input::old('taskId')!='')
-						<input type="button" class="btn btn-default hide" value="Create" onclick="ValidateDate()" id="btnSubmit">
-					@elseif($tasklists[0]->status!="Cancel"&&$tasklists[0]->status!="Pending")
-						<input type="button" class="btn btn-default" value="Create" onclick="ValidateDate()" id="btnSubmit">
-					@endif
-						<input type="button" class="btn btn-default hide" value="Edit" id="btnEdit">
-					
+					<input type="button" class="btn btn-default" value="Create" id="btnSubmit">
+					<input type="button" class="btn btn-default hide" value="Edit" id="btnEdit">					
 				</p>
 		    </div>		    
 			{{ Form::close() }}	
@@ -140,29 +143,12 @@
 				startDate  		: "Today"
 			})			
 		});
-	   function  ValidateDate(evt){ 
-			var str1 = $("#add_task #cboStartDate").val(); 
-			var str2 = $("#add_task #cboDueDate").val();
-			var dt1  = parseInt(str1.substring(0,2),10); 
-			var mon1 = getMonthFromString(str1.substring(str1.indexOf('-')+1,str1.lastIndexOf('-'))); 
-			var yr1  = parseInt(str1.substring(str1.lastIndexOf('-') + 1,str1.length),10);
-			var dt2  = parseInt(str2.substring(0,2),10); 
-			var mon2 = getMonthFromString(str2.substring(str1.indexOf('-')+1,str2.lastIndexOf('-'))); 
-			var yr2  = parseInt(str2.substring(str2.lastIndexOf('-') + 1,str2.length),10);
-			if(new Date(Date.parse(mon1 + " " + dt1 + ", " + yr1))>
-				new Date(Date.parse(mon2 + " " + dt2 + ", " + yr2))){
 
-				$("#add_task #due_error").text("Due Date should not be less than Start Date");
-				$("#add_task #startDate_error").text("");
-			}
-			else{
+		$('#add_task #btnSubmit').click(function(){
+			if(ValidateDate()){
 				document.task.submit();
 			}
-
-		}
-		function getMonthFromString(mon){
-		   	return new Date(Date.parse(mon +" 1, 2012")).getMonth()+1
-		}
+		});		
 
 	</script>
 		

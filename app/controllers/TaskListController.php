@@ -128,9 +128,9 @@ class TaskListController extends BaseController{
 		if(Input::get('tasklistId')!=null)
 			$tasklistId = Input::get('tasklistId');	
 		else
-			$tasklistId = Input::old('tasklistId');		
+			$tasklistId = Input::old('tasklistId');
 
-		$tasklists = DB::select(
+		$para['tasklist'] = DB::select(
 		"select TaskList.tasklistId, TaskList.tasklist, TaskList.desc, TaskList.startDate
 	, TaskList.dueDate, TaskList.status, Project.authorizedBy, Progress.progress from TaskList
 	left join 
@@ -146,27 +146,28 @@ class TaskListController extends BaseController{
 					on Task.taskId = TaskDetail.taskId where statusId = 7 group by tasklistId) Status
 			on Tlist.tasklistId = Status.tasklistId) Upper 
 				inner join 
-					( select tasklistId, count(1) total from Task group by tasklistId) Lower 
+					( select Task.tasklistId, count(1) total from Task join 
+						( TaskDetail join Status on TaskDetail.statusId = Status.statusId )
+					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId ) Lower 
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress 
 	on TaskList.tasklistId = Progress.tasklistId where TaskList.tasklistId = ?", array($tasklistId));
 
-		$tasks = DB::select("select Task.taskId, Task.task, Task.startDate, Task.dueDate, Member.member, 
+		$para['task'] = DB::select("select Task.taskId, Task.task, Task.startDate, Task.dueDate, Member.member, 
 						Priority.priority, TaskDetail.desc, Status.status, TaskDetail.remark from Task left join 
 			( TaskDetail left join Status on TaskDetail.statusId = Status.statusId ) on Task.taskId = TaskDetail.taskId 
 			left join Member on Task.assignTo = Member.memberId left join Priority on Task.priorityId = Priority.priorityId 
 			where Task.tasklistId = ? and Status.status <> 'Delete'", array($tasklistId));		
 
-		$prioritys = Priority::select('Priority.priorityId', 'Priority.priority')->get();		
+		$para['priority'] = Priority::select('Priority.priorityId', 'Priority.priority')->get();		
 
-		$members = DB::select("Select Member.memberId, Member.member from Member left join 
+		$para['member'] = DB::select("Select Member.memberId, Member.member from Member left join 
 			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
 			on users.id = users_groups.user_id) on Member.memberId = users.memberId 
 			where Member.orgId = ? and groups.name = 'Member' order by users_groups.group_id",array(Session::get('orgId')));
 
-		return View::make('partials/tasklist_detail')
-			->with(array('tasklists'=> $tasklists, 'tasks'=>$tasks, 'prioritys'=>$prioritys, 'members'=> $members));
-	}
+		return View::make('partials/tasklist_detail')->with(array('para'=>$para));
+	}	
 }
 
  ?>

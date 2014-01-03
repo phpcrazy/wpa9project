@@ -23,6 +23,7 @@
 						<div id="panel_wrapper" class="col-md-12">					
 							<div class="panel panel-primary">
 							  	<div class="panel-heading">
+							  		<span class="hide">Members</span>
 							    	<h3 class="panel-title">Member List</h3>
 							  	</div>
 							  	<div class="panel-body">

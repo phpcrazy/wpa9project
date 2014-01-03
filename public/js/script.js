@@ -26,6 +26,32 @@ function validateNumber(evt) {
     // comma, period and minus, . on keypad  key == 190 || key == 188 || key == 109 || key == 110 ||
 }
 
+function  ValidateDate(){ 
+    var str1 = $("#StartDate").val(); 
+    var str2 = $("#DueDate").val();
+    var dt1  = parseInt(str1.substring(0,2),10); 
+    var mon1 = getMonthFromString(str1.substring(str1.indexOf('-')+1,str1.lastIndexOf('-'))); 
+    var yr1  = parseInt(str1.substring(str1.lastIndexOf('-') + 1,str1.length),10);
+    var dt2  = parseInt(str2.substring(0,2),10); 
+    var mon2 = getMonthFromString(str2.substring(str1.indexOf('-')+1,str2.lastIndexOf('-'))); 
+    var yr2  = parseInt(str2.substring(str2.lastIndexOf('-') + 1,str2.length),10);
+
+    if(new Date(Date.parse(mon1 + " " + dt1 + ", " + yr1))>
+        new Date(Date.parse(mon2 + " " + dt2 + ", " + yr2))){
+        $("#due_error").text("Due Date should not be less than Start Date");
+        $("#startDate_error").text("");
+        return false;
+    }
+    else{
+        return true;
+    }
+
+}
+
+function getMonthFromString(mon){
+    return new Date(Date.parse(mon +" 1, 2012")).getMonth()+1
+}
+
 function notiTypeStyle(tmp){
     tmp.each(function(){
         var type = $(this).closest('p').children('span:first').text();
@@ -37,19 +63,33 @@ function notiTypeStyle(tmp){
     }); 
 }
 
-$(document).ready( function() {    
-    if($('body > .container .panel-title').text()=='Dashboard'||$('body > .container .panel-title').text().contains('Project')||$('body > .container .panel-title').text()=='Work Area'||$('body > .container .panel-title').text()=='Member List'||$('body > .container .panel-title').text()=='Progress'){
-        var title = $('body > .container .panel-title').text();
+$(document).ready( function() {
+    if($('body > .container .panel-heading span.hide').text()=='Dashboard'||$('body > .container .panel-heading span.hide').text()=='Projects'||$('body > .container .panel-heading span.hide').text()=='Work Area'||$('body > .container .panel-heading span.hide').text()=='Members'||$('body > .container .panel-heading span.hide').text()=='Progress'){
+        var title = $('body > .container .panel-heading span.hide').text();
         title = title.slice();
         if(title=='Dashboard')title='  Dashboard';          
         else if(title=='Progress')title='  Progress';
         else if(title=='Work Area')title='  Work Area';
-        else if(title=='Member List')title='  Members';
+        else if(title=='Members')title='  Members';
         else title='  Projects';
         
         $('#sidebar_wrapper a').each(function(){
             if($(this).children('span').text()==title)
                 $(this).addClass('active');         
         });
-    };
+    };        
+
+    $('.txtSource').each(function(){
+        var source = $(this).closest('body').find("div:first").attr('id');        
+        $(this).val(source);
+    });    
+
+    $('#btnNo').click(function(){
+        window.location.reload();
+    });
+
+    $('#btnYes').click(function(){
+        $(this).closest('#btn').find('#btnSubmit').click();
+        
+    });
 });

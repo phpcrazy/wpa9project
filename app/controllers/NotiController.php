@@ -8,16 +8,26 @@ class NotiController extends BaseController{
 			$day = 0;		
 			$num = 0;
 		}
-		else if(Input::get('num')!=null){											
-			$day = date("z",strtotime(date('Y-m-d H:i:s'))) - date("z",strtotime(Input::get('date')));	
-			$num = Input::get('num');
-		}		
-		else{			
-			$day = date("z",strtotime(date('Y-m-d H:i:s'))) - date("z",strtotime(Input::get('date')));
-			$num=0;
-		}
+		else{
+			if(Input::get('num')!=null)
+				$num = Input::get('num');
 
+			else
+				$num=0;
+					
+			if(getdate()['year']!=date('Y',strtotime(Input::get('date'))))	
+				$temp = (getdate()['yday'] + 1) + date("z", mktime(0,0,0,12,31, getdate()['year'])) + 1;
+			
+			else
+				$temp = getdate()['yday'] + 1;
+
+			$day = $temp - (date("z",strtotime(Input::get('date')))+1);						
+		}				
+		
 		$resolver = new Resolver;
+
+		$clients = Client::where('orgId', Session::get('orgId'))
+					->select('clientId','client')->get();		
 
 		$notis = DB::select(
 	"select Noti.notiId, Noti.dateToNoti Date, Member.member `By`
@@ -33,6 +43,10 @@ class NotiController extends BaseController{
 		on Noti.messageId = NotiMessage.messageId 
 	join Member on Noti.createdBy = Member.memberId 
 	where Noti.orgId = ? and NotiDetail.notiTo = ? and ( NotiMessage.notiTypeId = 1 or NotiMessage.notiTypeId = 3 or ( NotiMessage.notiTypeId = 2 and Noti.dateToNoti <= CURDATE() ) ) order by Date desc, Noti.notiId desc", array(Session::get('orgId'),Session::get('memberId')));	
+		
+		if(count($notis)==null)
+			return View::make('partials/home')->with(array('clients'=>$clients));
+
 		$notis0 = $notis;
 
 		$j = 0;
@@ -70,26 +84,25 @@ class NotiController extends BaseController{
 			if($j==$day)$notis1 = $notis;				
 			$notis = $notis0;
 		}	
-		if(count($notis1)!=0){
-			$notis1 = array_values($resolver->notiSortType($notis1));
-			$sourceId = substr($notis1[$num]->source,3);
-			$desc = $resolver->descResolver($notis1[$num]->Type, $sourceId);	
+
+		if($notis1!=null){			
+			$notis1 = array_values($resolver->notiSortType($notis1));			
+			$sourceId = substr($notis1[$num]->source,3);			
+			$desc = $resolver->descResolver($notis1[$num]->Type, $sourceId);				
 		}		
 		else{
-			$notis1 = new Illuminate\Database\Eloquent\Collection;
-			$notis1[0] = 'empty';
-			$desc = new Illuminate\Database\Eloquent\Collection;
-			$desc[0] = 'empty';
+			if(Input::get('date')!=null)
+				return View::make('partials/noti_detail')->with(array('clients'=>$clients, 'count'=> $count));	
+
+			return View::make('partials/home')->with(array('clients'=>$clients, 'count'=> $count));
 		}
 
-		$clients = Client::where('orgId', Session::get('orgId'))
-					->select('clientId','client')->get();		
-
+		
 		if(Input::get('num')!=null)
 			return View::make('partials/description')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));		
 
 		if(Input::get('date')!=null)
-			return View::make('partials/noti_detail')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));
+			return View::make('partials/noti_detail')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));		
 
 		return View::make('partials/home')->with(array('notis'=>$notis1, 'clients'=>$clients, 'count'=> $count, 'desc'=>$desc));
 	}

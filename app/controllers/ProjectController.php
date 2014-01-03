@@ -78,10 +78,11 @@ class ProjectController extends BaseController{
 			(select distinct tasklistId from Task) Tlist 
 			left join
 				( select tasklistId, count(1) status from Task join TaskDetail 
-					on Task.taskId = TaskDetail.taskId where statusId = 7 group by tasklistId) Status
+					on Task.taskId = TaskDetail.taskId where statusId = 9 group by tasklistId) Status
 			on Tlist.tasklistId = Status.tasklistId) Upper 
 				inner join 
-					( select tasklistId, count(1) total from Task group by tasklistId) Lower 
+					( select Task.tasklistId, count(1) total from Task join ( TaskDetail join Status on TaskDetail.statusId = Status.statusId )
+					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId) Lower 
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress
 	on TaskList.tasklistId = Progress.tasklistId where Project.orgId = ? group by Module.moduleId )
@@ -209,7 +210,9 @@ class ProjectController extends BaseController{
 					on Task.taskId = TaskDetail.taskId where statusId = 7 group by tasklistId) Status
 			on Tlist.tasklistId = Status.tasklistId) Upper 
 				inner join 
-					( select tasklistId, count(1) total from Task group by tasklistId) Lower 
+					( select Task.tasklistId, count(1) total from Task join 
+						( TaskDetail join Status on TaskDetail.statusId = Status.statusId )
+					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId ) Lower 
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress
 	on TaskList.tasklistId = Progress.tasklistId where Project.projectId = ? group by Module.moduleId )
@@ -230,7 +233,9 @@ class ProjectController extends BaseController{
 				on Task.taskId = TaskDetail.taskId where statusId = 7 group by tasklistId) Status
 		on Tlist.tasklistId = Status.tasklistId) Upper 
 			inner join 
-				( select tasklistId, count(1) total from Task group by tasklistId) Lower 
+				( select Task.tasklistId, count(1) total from Task join 
+						( TaskDetail join Status on TaskDetail.statusId = Status.statusId )
+					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId ) Lower 
 			on Upper.tasklistId = Lower.tasklistId
 	) Progress
 on TaskList.tasklistId = Progress.tasklistId where Project.projectId = ? and Module.status <> 'Delete' group by Module.moduleId", array($projectId));

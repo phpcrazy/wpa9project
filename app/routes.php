@@ -183,12 +183,16 @@ Route::group(array('before' => 'auth|loginStatus'), function(){
 		'before'=>	'csrf',
 		'uses'	=> 'TaskController@task_delete'
 	));
+
+	Route::get('/workarea', array(
+		'as'	=> 'workarea',		
+		'uses'	=> 'TaskController@workarea'
+	));	
 });
 
 Route::any('test', function(){	
 
-    $clients = Task::where('Task.taskId', 2)->join('TaskDetail','Task.taskId','=','TaskDetail.taskId')->select('task as title','desc')->get();
-
-	var_dump($clients);
+	$module = Module::where('active',1)->where('projectId',1)->select('moduleId')->get();
+		var_dump($module->moduleId);
 
 });

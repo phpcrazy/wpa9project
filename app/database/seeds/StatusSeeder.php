@@ -16,7 +16,7 @@ class StatusSeeder extends Seeder {
         DB::table('Status')->insert(array('status'=>'Progress'));
         DB::table('Status')->insert(array('status'=>'Cancel'));
         DB::table('Status')->insert(array('status'=>'Delete'));           
-        DB::table('Status')->insert(array('status'=>'Complete'));
+        DB::table('Status')->insert(array('status'=>'Submit'));
         DB::table('Status')->insert(array('status'=>'Finish'));
 	}
  
