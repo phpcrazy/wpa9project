@@ -16,15 +16,15 @@
 		</div> <!-- end of breadcrumb_wrapper -->
 		<div id="main_content_wrapper" class="row">
 			@include('partials.sidebar')
-			<div id="main_content" class="col-md-7">
+			<div id="main_content" class="col-md-10">
 				<div class="row">
-					<div id="panel_wrapper" class="col-md-12">					
+					<div id="tasklist_area" class="col-md-8">					
 						<div class="panel panel-primary">
 						  	<div class="panel-heading">
-						    	<h3 class="panel-title">Tasklist Detail</h3>
+						    	<h3 class="panel-title">{{Lang::get('caption.title.tasklist_detail.main')}}</h3>
 						 	</div>
 						 	<div class="panel-body">
-						 		<div id="tasklistSection">
+						 		
 						 		{{ Form::open(array(
 									'method'		=> 'post',
 									'route'			=> 'tasklist_update',
@@ -49,7 +49,7 @@
 								if($para['tasklist'][0]->desc==null)$desc='&nbsp;';
 									else $desc=$para['tasklist'][0]->desc;
 								?>						 			
-						 		<p class="row"><span class="col-md-3 text-right"><strong>Descripion : </strong></span><span class="col-md-9 text-left lblHide">{{$desc}}</span>						 	
+						 		<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.desc')}} : </strong></span><span class="col-md-9 text-left lblHide">{{$desc}}</span>						 	
 								 	{{ Form::text('desc', $para['tasklist'][0]->desc, array("class" => 'form-control txtShow')) 
 									}}
 								</p>
@@ -60,7 +60,7 @@
 										$ddate = $ddate->format('d-F-Y');									
 									?>
 								<p class="row">
-									<span class="col-md-3 text-right"><strong>Started date : </strong></span><span class="col-md-9 text-left lblHide">{{$sdate}}</span>
+									<span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.s_date')}} : </strong></span><span class="col-md-9 text-left lblHide">{{$sdate}}</span>
 									{{ Form::text('startDate',$sdate,
 								  		array("class"=>'form-control date_picker txtShow',
 								  			   "data-date-format"=>'dd-MM-yyyy', 
@@ -69,7 +69,7 @@
 									}}
 								</p>
 								<p class="row">
-									<span class="col-md-3 text-right"><strong>Due date : </strong></span><span class="col-md-9 text-left lblHide">{{$ddate}}</span>
+									<span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.d_date')}} : </strong></span><span class="col-md-9 text-left lblHide">{{$ddate}}</span>
 									{{ Form::text('startDate',$ddate,
 								  		array("class"=>'form-control date_picker txtShow',
 								  			   "data-date-format"=>'dd-MM-yyyy', 
@@ -77,25 +77,24 @@
 								  			   "id" => "dueDate", 'readonly'))
 									}}
 								</p>
-								<p class="row"><span class="col-md-3 text-right"><strong>Status : </strong></span><span class="text-left lblStatus label">{{$para['tasklist'][0]->status}}</span></p>
+								<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.status')}} : </strong></span><span class="text-left lblStatus label">{{$para['tasklist'][0]->status}}</span></p>
 								<?php
 									 if($para['tasklist'][0]->progress==null) $progress = '0%';
 									 else $progress = $para['tasklist'][0]->progress;
 								?>
-								<p class="row"><span class="col-md-3 text-right"><strong>Progress : </strong></span><span class="text-left">{{$progress}}</span></p>	
-								</div> <!--- end of tasklistSection -->
+								<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.progress')}} : </strong></span><span class="text-left">{{$progress}}</span></p>	
 								<div class="task_detail">									
-									<h4 class="red_text">Tasks on {{$para['tasklist'][0]->tasklist}}</h4>			  						
+									<h4 class="red_text">{{Lang::get('caption.title.tasklist_detail.task_area')}} on {{$para['tasklist'][0]->tasklist}}</h4>			  						
 			  							@include('partials/task_detail')			  										
 								</div><!--- end of taskSection -->					 					
 							</div>
 						</div> <!--- end of panel_wrapper -->
 					</div>
+					<div id="task_area" class="col-md-4">
+						@include('partials/add_task')
+					</div>
 				</div>
-			</div> <!-- end of main_content -->
-			<div id="task_area" class="col-md-3">
-				@include('partials/add_task')
-			</div>			
+			</div> <!-- end of main_content -->						
 		</div> <!-- end of main_content_wrapper -->
 	</div>
 

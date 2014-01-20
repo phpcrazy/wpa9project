@@ -17,7 +17,7 @@
 					<div id="panel_wrapper" class="col-md-12">					
 						<div class="panel panel-primary">
 						  	<div class="panel-heading">
-						    	<h3 class="panel-title">Detail Information of {{ $member[0]->member }}</h3>
+						    	<h3 class="panel-title">{{Lang::get('caption.title.member_detail')}} {{ $para['member']->member }}</h3>
 						  	</div>
 						  	<div class="panel-body">	
 						  		{{ Form::open(array(
@@ -36,10 +36,10 @@
 								)) }}				
 							  	<p class="col-md-2 col-md-offset-5 text-left">
 
-							  		<img src="{{ $member[0]->photoPath }}" class="img-rounded text-center" alt="" width="100" id='userPhoto'/>
+							  		<img src="{{ $para['member']->photoPath }}" class="img-rounded text-center" alt="" width="100" id='userPhoto'/>
 							  		<div class="controls txtShow" id="photo_control">
 										<input id="uploadPhoto" type="file" onchange="showPhoto(this);" class='form-control' name='profile' value="{{Input::old('profile')}}"/>					
-										<div id="falsebtn" class="btn btn-default">Browse</div><span id="photo_warn">max-2mb</span>					
+										<div id="falsebtn" class="btn btn-default">Browse</div><span id="photo_warn">{{Lang::get('caption.label.member_detail.photo_warn')}}</span>					
 									</div>
 							  	</p>
 							  	{{ Form::submit('Submit', array('class' => 'btn btn-default hide', 'id'=>'btnSubmit')) }}
@@ -47,8 +47,8 @@
 							  	<div class="col-md-3 col-md-offset-1">
 							  		<select class="form-control text-center" id="cboMember">
 							  		<option>Choose Other</option>
-										@foreach($members as $mber)
-											@if($member[0]->member==$mber->member)						
+										@foreach($para['members'] as $mber)
+											@if($para['member']->member==$mber->member)						
 												<option value="{{$mber->memberId}}" disabled="true">{{ $mber->member }}</option>		
 											@else
 												<option value="{{$mber->memberId}}">{{ $mber->member }}</option>
@@ -57,47 +57,47 @@
 									</select>
 									<a id="memChoose"></a>
 								</div>
-								{{ Form::hidden('mId',$member[0]->memberId, array("class" => 'form-control', 'id' => 'mId'
+								{{ Form::hidden('mId',$para['member']->memberId, array("class" => 'form-control', 'id' => 'mId'
 								)) }}
 								<div class="row">
 									<div class="col-md-8 col-md-offset-3">
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Member Name :</strong></span><span class="col-md-8 text-left lblHide">{{ $member[0]->member }}</span>
-											{{ Form::text('member', $member[0]->member, array("class" => 'form-control txtShow'
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.member_name')}} :</strong></span><span class="col-md-8 text-left lblHide">{{ $para['member']->member }}</span>
+											{{ Form::text('member', $para['member']->member, array("class" => 'form-control txtShow'
 												)) 
 											}}
 										</p>
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Role :</strong></span><span class="col-md-8 text-left">{{ $member[0]->role }}</span>
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.role')}} :</strong></span><span class="col-md-8 text-left">{{ $para['member']->role }}</span>
 										</p>
 										<?php 
-											$date = date_create($member[0]->created_at);
+											$date = date_create($para['member']->created_at);
 											$jDate = $date->format('d-M-Y');
 										?>
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Jonined Date :</strong></span><span class="col-md-8 text-left">{{ $jDate }}</span>
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.j_date')}} :</strong></span><span class="col-md-8 text-left">{{ $jDate }}</span>
 										</p>
 										<?php
-											if($member[0]->phone==null)$phone='&nbsp';
-											else $phone=$member[0]->phone;
+											if($para['member']->phone == null)$phone='&nbsp';
+											else $phone = $para['member']->phone;
 										?>
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Phone :</strong></span><span class="col-md-8 text-left lblHide">{{ $phone }}</span>
-											{{ Form::text('phone', $member[0]->phone, array("class" => 'form-control txtShow', 'onkeydown' => 'validateNumber(event)')) 
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.ph')}} :</strong></span><span class="col-md-8 text-left lblHide">{{ $phone }}</span>
+											{{ Form::text('phone', $para['member']->phone, array("class" => 'form-control txtShow', 'onkeydown' => 'validateNumber(event)')) 
 											}}
 										</p>
 										<?php
-											if($member[0]->address==null)$address='&nbsp';
-											else $address=$member[0]->address;
+											if($para['member']->address == null)$address = '&nbsp';
+											else $address = $para['member']->address;
 										?>
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Address :</strong></span><span class="col-md-8 text-left lblHide">{{ $address }}</span>
-											{{ Form::text('address', $member[0]->address, array("class" => 'form-control txtShow')) 
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.add')}} :</strong></span><span class="col-md-8 text-left lblHide">{{ $address }}</span>
+											{{ Form::text('address', $para['member']->address, array("class" => 'form-control txtShow')) 
 											}}
 										</p>
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Username :</strong></span><span class="col-md-8 text-left lblHide">{{ $member[0]->username }}</span>
-											{{ Form::text('username', $member[0]->username, array("class" => 'form-control inputUsername txtShow')) 
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.username')}} :</strong></span><span class="col-md-8 text-left lblHide">{{ $para['member']->username }}</span>
+											{{ Form::text('username', $para['member']->username, array("class" => 'form-control inputUsername txtShow')) 
 											}}
 										</p>
 										<p class="error_msg">
@@ -108,8 +108,8 @@
 											@endif
 										</p>
 										<p class="textclear row">
-											<span class="col-md-4 text-right"><strong>Email Address :</strong></span><span class="col-md-8 text-left lblHide">{{ $member[0]->email }}</span>
-											{{ Form::text('email', $member[0]->email, array("class" => 'form-control txtShow'
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.email')}} :</strong></span><span class="col-md-8 text-left lblHide">{{ $para['member']->email }}</span>
+											{{ Form::text('email', $para['member']->email, array("class" => 'form-control txtShow'
 												)) 
 											}}
 										</p>
@@ -121,7 +121,7 @@
 											@endif
 										</p>										
 										<p class="textclear row passField">
-											<span class="col-md-4 text-right"><strong>Password :</strong></span>
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.pass')}} :</strong></span>
 											{{ Form::password('password', array("class" => 'form-control inputPassword txtShow', 'placeholder'=>'***********'
 											)) 
 										}}										
@@ -134,7 +134,7 @@
 											@endif
 										</p>
 										<p class="textclear row passField">
-											<span class="col-md-4 text-right"><strong>Confirm Password :</strong></span>
+											<span class="col-md-4 text-right"><strong>{{Lang::get('caption.label.member_detail.c_pass')}} :</strong></span>
 											{{ Form::password('password_confirmation', array("class" => 'form-control inputPassword txtShow password_confirmation', 'placeholder'=>'***********'
 											)) 
 										}}										

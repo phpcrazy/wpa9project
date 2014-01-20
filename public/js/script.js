@@ -1,3 +1,10 @@
+/*
+    Author       = Sat Kyar
+    StartDate    = 28 Dec 2013
+    ModifiedDate = 15 Jan 2014
+    Purpose      = to Validate field to only numeric
+    Remark  
+*/
 function validateNumber(evt) {
     var e = evt || window.event;
     var key = e.keyCode || e.which;
@@ -26,9 +33,20 @@ function validateNumber(evt) {
     // comma, period and minus, . on keypad  key == 190 || key == 188 || key == 109 || key == 110 ||
 }
 
-function  ValidateDate(){ 
-    var str1 = $("#StartDate").val(); 
-    var str2 = $("#DueDate").val();
+/*
+    Author       = Sat Kyar
+    StartDate    = 28 Dec 2013
+    ModifiedDate = 15 Jan 2014
+    Purpose      = to Check DueDate not greater than StartDate
+    Remark  
+        0 tmp --- id of the form
+*/
+function  ValidateDate(tmp){ 
+    tmp = '#' + tmp;
+    var startDate = tmp + ' #StartDate';
+    var dueDate = tmp + ' #DueDate';
+    var str1 = $(startDate).val(); 
+    var str2 = $(dueDate).val();
     var dt1  = parseInt(str1.substring(0,2),10); 
     var mon1 = getMonthFromString(str1.substring(str1.indexOf('-')+1,str1.lastIndexOf('-'))); 
     var yr1  = parseInt(str1.substring(str1.lastIndexOf('-') + 1,str1.length),10);
@@ -36,10 +54,12 @@ function  ValidateDate(){
     var mon2 = getMonthFromString(str2.substring(str1.indexOf('-')+1,str2.lastIndexOf('-'))); 
     var yr2  = parseInt(str2.substring(str2.lastIndexOf('-') + 1,str2.length),10);
 
-    if(new Date(Date.parse(mon1 + " " + dt1 + ", " + yr1))>
-        new Date(Date.parse(mon2 + " " + dt2 + ", " + yr2))){
-        $("#due_error").text("Due Date should not be less than Start Date");
-        $("#startDate_error").text("");
+    if(new Date(Date.parse(mon1 + ' ' + dt1 + ', ' + yr1))>
+        new Date(Date.parse(mon2 + ' ' + dt2 + ', ' + yr2))){
+        var due_error = tmp + ' #due_error';
+        var startDate_error = tmp + ' #startDate_error';
+        $(due_error).text('Due Date should not be less than Start Date');
+        $(startDate_error).text('');
         return false;
     }
     else{
@@ -49,9 +69,17 @@ function  ValidateDate(){
 }
 
 function getMonthFromString(mon){
-    return new Date(Date.parse(mon +" 1, 2012")).getMonth()+1
+    return new Date(Date.parse(mon +' 1, 2012')).getMonth()+1
 }
 
+/*
+    Author       = Sat Kyar
+    StartDate    = 28 Dec 2013
+    ModifiedDate = 15 Jan 2014
+    Purpose      = to change label style acc/to noti type
+    Remark  
+        0 tmp --- noti type label to change
+*/
 function notiTypeStyle(tmp){
     tmp.each(function(){
         var type = $(this).closest('p').children('span:first').text();
@@ -64,12 +92,19 @@ function notiTypeStyle(tmp){
 }
 
 $(document).ready( function() {
+    /*
+        Author       = Sat Kyar
+        StartDate    = 28 Dec 2013
+        ModifiedDate = 15 Jan 2014
+        Purpose      = to change sidebar active status acc/to page
+        Remark  
+    */
     if($('body > .container .panel-heading span.hide').text()=='Dashboard'||$('body > .container .panel-heading span.hide').text()=='Projects'||$('body > .container .panel-heading span.hide').text()=='Work Area'||$('body > .container .panel-heading span.hide').text()=='Members'||$('body > .container .panel-heading span.hide').text()=='Progress'){
         var title = $('body > .container .panel-heading span.hide').text();
         title = title.slice();
         if(title=='Dashboard')title='  Dashboard';          
         else if(title=='Progress')title='  Progress';
-        else if(title=='Work Area')title='  Work Area';
+        else if(title=='WorkArea')title='  Work Area';
         else if(title=='Members')title='  Members';
         else title='  Projects';
         
@@ -79,17 +114,93 @@ $(document).ready( function() {
         });
     };        
 
-    $('.txtSource').each(function(){
-        var source = $(this).closest('body').find("div:first").attr('id');        
+    /*
+        Author       = Sat Kyar
+        StartDate    = 28 Dec 2013
+        ModifiedDate = 15 Jan 2014
+        Purpose      = to show datepicker
+        Remark  
+            0 length => to check element exists or not
+    */
+    if($('.date_picker').length){
+        $('.date_picker').datepicker({
+            showButtonPanel : true,
+            autoclose       : true,
+            startDate       : 'Today'
+        });
+    }
+
+    /*
+        Author       = Sat Kyar
+        StartDate    = 28 Dec 2013
+        ModifiedDate = 15 Jan 2014
+        Purpose      = to know id of the page
+        Remark  
+    */
+    $('.container #Source').each(function(){
+        var source = $(this).closest('body').find('div:first').attr('id');        
         $(this).val(source);
     });    
 
-    $('#btnNo').click(function(){
+    /*
+        Author       = Sat Kyar
+        StartDate    = 28 Dec 2013
+        ModifiedDate = 15 Jan 2014
+        Purpose      = Yes No button event of confirm delete, confirm rename box
+        Remark  
+    */
+    $('.container #btnNo').click(function(){
         window.location.reload();
     });
 
     $('#btnYes').click(function(){
-        $(this).closest('#btn').find('#btnSubmit').click();
-        
+        $(this).closest('#btn').find('#btnSubmit').click();        
     });
+
+    /*
+        Author       = Sat Kyar
+        StartDate    = 28 Dec 2013
+        ModifiedDate = 15 Jan 2014
+        Purpose      = To call ValidateDate b/f submit
+        Remark  
+    */
+    $('.container #btnSubmit').click(function(){
+        if($(this).closest('.panel').attr('id'))var id = $(this).closest('.b-form').attr('id');
+        else id = $(this).closest('.m-form').attr('id');
+        
+        if(ValidateDate(id)){
+            switch(id){
+                case 'add_task':
+                    document.task.submit();break;
+                case 'add_tasklist':
+                    document.tasklist.submit();break;
+                case 'add_module':
+                    document.module.submit();break;
+                case 'add_project':
+                    document.project.submit();break;
+            }
+        }        
+    });
+
+    /*
+        Author       = Sat Kyar
+        StartDate    = 28 Dec 2013
+        ModifiedDate = 17 Jan 2014
+        Purpose      = To upload profile photo in add_member & register
+        Remark  
+    */
+    $('#falsebtn').click(function(){
+        $('#uploadPhoto').click();
+    });
+    function showPhoto(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#userPhoto')
+                    .attr('src', e.target.result)                                   
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 });

@@ -1,13 +1,13 @@
-	<div class="accordion-inner">	
+	<div class='accordion-inner'>	
 	<?php
-	if(isset($notis)){
+	if(isset($para['noti'])){
 		$i=0;
 	?>
-		@foreach($notis as $noti)												
-		<div class="noti_format">
+		@foreach($para['noti'] as $noti)												
+		<div class='noti_format'>
 			<p>
-				<span class="hide">{{$noti->notiTypeId}}</span>
-				<span class="label">{{$noti->Type}}</span>
+				<span class='hide'>{{$noti->notiTypeId}}</span>
+				<span class='label'>{{$noti->Type}}</span>
 				{{$noti->Details}}
 			</p>
 			<span class='hide'>{{$i}}</span>
@@ -31,7 +31,7 @@
 				$(this).hide();
 			})
 			tmp.find('.noti_detail').load(url,function(){
-				notiTypeStyle($('#noti_area .noti_detail .noti_format span'));
+				notiTypeStyle($('#noti_area .noti_detail .noti_format span.label'));
 			});
 			tmp.find('.noti_detail').show();
 			

@@ -1,19 +1,24 @@
 <?php 
 
+/*
+	Author		 = Sat Kyar
+	StartDate 	 = 28 Dec 2013
+	ModifiedDate = 16 Jan 2014
+	Purpose		 = For Authentication, Registration of user
+	Remark
+*/
+
 class UserController extends BaseController {
 
-	public function loginAction()
-	{	// firstly check user authenticated or not if yes, bypass to the home page
-		if(!Sentry::check())
-		{
+	public function loginAction(){
+	// firstly check user authenticated or not if yes, bypass to the home page
+		if(!Sentry::check()){
 			// if request made by get pass to the login page if by post, authenticate
-			if(Request::server("REQUEST_METHOD")=="POST")
-			{
+			if(Request::server("REQUEST_METHOD")=="POST"){
 				$validator = Validator::make(Input::all(), Config::get('validation.login'));
 
-				if($validator->fails()) {					
-					return Redirect::to('/')->withInput(Input::only('email'))->withErrors($validator);	
-				}
+				if($validator->fails()) 				
+					return Redirect::to('/')->withInput(Input::only('email'))->withErrors($validator);					
 
 				$credentials = array(
 					'email' 		=> trim(Input::get('email')),
@@ -32,9 +37,7 @@ class UserController extends BaseController {
 					->join('users','Member.memberId','=','users.memberId')
 					->select('Member.memberId','Member.member','Member.photoPath')->get();
 
-				if($members[0]->memberId){
-					$type = 'member';
-				}
+				if($members[0]->memberId) $type = 'member';				
 				else $type = 'client';
 
 				Session::put('userId',$user->getId());
@@ -59,16 +62,14 @@ class UserController extends BaseController {
 					return Redirect::route('home');
 				}
 				// if blank, it means user is first time registration and login, redirect to org registration page
-				else{
+				else
+					return Redirect::route('add_org');				
 
-					return Redirect::route('add_org');
-				}
-
-			}// firstly call the login 			
+			}// firstly call the login with '/' in address bar			
 			return View::make("partials.login");
 
-		}// if user keep login on, directly go the home page
-		return View::make('hello');			
+		}// if user keep login check box on, directly go the home page
+		return Redirect::route('home');			
 	}
 
 	public function register() {
@@ -76,13 +77,12 @@ class UserController extends BaseController {
 		{
 			$validator = Validator::make(Input::all(), Config::get('validation.register'));
 
-			if($validator->fails()) {				
-				return Redirect::route('register')->withInput()->withErrors($validator);
-
-			} 
+			if($validator->fails()) 		
+				return Redirect::route('register')->withInput()->withErrors($validator);			
 							
 			$name = trim(Input::get('username'));
 
+			//for photo upload by user
 			if(Input::hasFile('profile')){
 				$photo = Input::file('profile');
 				$photoPath = '/uploads/'. $name . '.' . $photo->getClientOriginalExtension();
@@ -90,17 +90,18 @@ class UserController extends BaseController {
 				try{
 					$photo->move(public_path() . '/uploads/', $name . '.' . $photo->getClientOriginalExtension());
 				}
-
+				// if photo size exceed more than 2mb
 				catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
 				{
 					return Redirect::route('register')->withErrors(array('profile' => 'Photo size should not exceed more than 2mb.'));
 				}
 			}
+			//if user not upload photo, use default photo instead
 			else{					
 				$photoPath = '/uploads/'. $name . '.png';
 				File::copy('img/profile.png','uploads/' . $name . '.png');
 			}
-
+			
 			$member=array(
 				'member'	=>	trim(Input::get('fullname')), 
 				'address'	=>	trim(Input::get('address')),

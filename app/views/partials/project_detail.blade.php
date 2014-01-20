@@ -20,13 +20,11 @@
 		<div id="main_content_wrapper" class="row">
 				@include('partials.sidebar')
 			<div id="main_content" class="col-md-10">
-
 				<div class="row">
-					<div id="panel_wrapper" class="col-md-12">
-					
+					<div id="panel_wrapper" class="col-md-12">					
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Details of Project</h3>
+						    <h3 class="panel-title">{{Lang::get('caption.title.project_detail.main')}}</h3>
 						  </div>
 						  <div class="panel-body">
 						  <div id='projectSection'>
@@ -37,7 +35,7 @@
 								'class'			=> 'form-horizontal'
 								))
 							}}		
-							{{ Form::hidden('projectId',$projects[0]->projectId, array("class" => 'form-control', 'id' => 'txtProjectId'
+							{{ Form::hidden('projectId',$para['project']->projectId, array("class" => 'form-control', 'id' => 'txtProjectId'
 							)) }}
 							{{ Form::hidden('key','', array("class" => 'form-control', 'id' => 'txtKey'
 							)) }}	
@@ -45,22 +43,22 @@
 							)) }}
 							{{ Form::submit('Submit', array('class' => 'btn btn-default hide', 'id'=>'btnSubmit')) }}
 							{{ Form::close() }}	 
-						 	<h4><span  class="red_text">{{$projects[0]->project}}</span> - {{$projects[0]->client}}</h4>	
+						 	<h4><span  class="red_text">{{$para['project']->project}}</span> - {{$para['project']->client}}</h4>	
 						 	<?php
-								if($projects[0]->desc==null)$desc='&nbsp;';
-								else $desc=$projects[0]->desc;
+								if($para['project']->desc == null)$desc='&nbsp;';
+								else $desc = $para['project']->desc;
 							?>
-						 	<p class="row"><span class="col-md-2 text-right"><strong>Descripion : </strong></span><span class="col-md-10 text-left lblHide">{{$desc}}</span>						 	
-						 	{{ Form::text('desc', $projects[0]->desc, array("class" => 'form-control txtShow')) 
+						 	<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.desc')}} : </strong></span><span class="col-md-10 text-left lblHide">{{$desc}}</span>						 	
+						 	{{ Form::text('desc', $para['project']->desc, array("class" => 'form-control txtShow')) 
 							}}
 							</p>
 						 		<?php 
-									$sdate = date_create($projects[0]->startDate);
+									$sdate = date_create($para['project']->startDate);
 									$sdate = $sdate->format('d-F-Y');
-									$ddate = date_create($projects[0]->dueDate);
+									$ddate = date_create($para['project']->dueDate);
 									$ddate = $ddate->format('d-F-Y');									
 								?>
-								<p class="row"><span class="col-md-2 text-right"><strong>Started date : </strong></span><span class="col-md-10 text-left lblHide">{{$sdate}}</span>
+								<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.s_date')}} : </strong></span><span class="col-md-10 text-left lblHide">{{$sdate}}</span>
 								{{ Form::text('startDate',$sdate,
 							  		array("class"=>'form-control date_picker txtShow',
 							  			   "data-date-format"=>'dd-MM-yyyy', 
@@ -68,7 +66,7 @@
 							  			   "id" => "startDate", 'readonly'))
 								}}
 								</p>
-								<p class="row"><span class="col-md-2 text-right"><strong>Due date : </strong></span><span class="col-md-10 text-left lblHide">{{$ddate}}</span>
+								<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.d_date')}} : </strong></span><span class="col-md-10 text-left lblHide">{{$ddate}}</span>
 								{{ Form::text('dueDate',$ddate,
 							  		array("class"=>'form-control date_picker txtShow',
 							  			   "data-date-format"=>'dd-MM-yyyy', 
@@ -76,16 +74,16 @@
 							  			   "id" => "dueDate", 'readonly'))
 								}}
 								</p>
-								<p class="row"><span class="col-md-2 text-right"><strong>Authorized by : </strong></span>{{$projects[0]->member}}</p>
-								<p class="row"><span class="col-md-2 text-right"><strong>Status : </strong></span><span class="text-left lblStatus label">{{$projects[0]->status}}</span></p>
+								<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.a_by')}} : </strong></span>{{$para['project']->member}}</p>
+								<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.status')}} : </strong></span><span class="text-left lblStatus label">{{$para['project']->status}}</span></p>
 								<?php
-									 if($projects[0]->progress==null) $progress = '0%';
-									 else $progress = $projects[0]->progress;
+									 if($para['project']->progress == null) $progress = '0%';
+									 else $progress = $para['project']->progress;
 								?>
-								<p class="row"	><span class="col-md-2 text-right"><strong>Progress : </strong></span><span class="text-left">{{$progress}}</span></p>
+								<p class="row"	><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.progress')}} : </strong></span><span class="text-left">{{$progress}}</span></p>
 								</div>
 								<div id="moduleSection">
-								<h4 class="red_text">Modules on {{$projects[0]->project}}</h4>
+								<h4 class="red_text">{{Lang::get('caption.title.project_detail.module_area')}} on {{$para['project']->project}}</h4>
 			  						{{ Form::open(array(
 										'method'		=> 'post',
 										'route'			=> 'module_update',
@@ -93,7 +91,7 @@
 										'class'			=> 'form-horizontal'
 										))
 									}}		
-									{{ Form::hidden('projectId',$projects[0]->projectId, array("class" => 'form-control'
+									{{ Form::hidden('projectId',$para['project']->projectId, array("class" => 'form-control'
 									)) }}
 									{{ Form::hidden('moduleId',0, array("class" => 'form-control','id'=>'txtModuleId'
 									)) }}
@@ -104,15 +102,15 @@
 			  						<table class="table table-hover">
 										<thead>
 											<tr>
-												<th><i class="glyphicon glyphicon-list"></i> Module Name</th>
-												<th><i class="glyphicon glyphicon-calendar"></i> Due Date </th>
-												<th><i class="glyphicon glyphicon-stats"></i> Progress</th>
-												<th><i class="glyphicon glyphicon-wrench"></i> Action</th>
+												<th><i class="glyphicon glyphicon-list"></i> {{Lang::get('caption.label.detail.mod_name')}}</th>
+												<th><i class="glyphicon glyphicon-calendar"></i> {{Lang::get('caption.label.detail.d_date')}}</th>
+												<th><i class="glyphicon glyphicon-stats"></i> {{Lang::get('caption.label.detail.progress')}}</th>
+												<th><i class="glyphicon glyphicon-wrench"></i> {{Lang::get('caption.label.detail.action')}}</th>
 											</tr>
 										</thead>
 										<tbody>
 																
-											@foreach($modules as $module)
+											@foreach($para['module'] as $module)
 											<tr>											
 												<?php
 													$date = date_create($module->dueDate);
@@ -133,7 +131,7 @@
 												?>
 												<td>{{$progress}}</td>
 												<td class='buttonGroup'>
-													@if(Session::get('member')==$projects[0]->member&&$projects[0]->status!="Cancel"&&$projects[0]->status!="Pending")
+													@if(Session::get('member') == $para['project']->member && $para['project']->status!="Cancel" && $para['project']->status!="Pending")
 														@if($module->active==0)
 															<a class="btn btn-primary btn-sm btnModuleActive" data-content="make active module" data-trigger="hover" data-toggle="popover" data-placement="top">
 																<span class="glyphicon glyphicon-edit"></span>
@@ -150,8 +148,8 @@
 								</table>
 								{{ Form::submit('Submit', array('class' => 'btn btn-default hide', 'id'=>'btnSubmit')) }}
 								{{ Form::close() }}									
-								@if(Session::get('member')==$projects[0]->member&&$projects[0]->status!="Cancel"&&$projects[0]->status!="Pending")
-									<p><a class="btn btn-primary btn-sm" href="#addModule" data-toggle="modal" id="btnAddModule">+ Add New Module</a></p>
+								@if(Session::get('member') == $para['project']->member && $para['project']->status!="Cancel" && $para['project']->status!="Pending")
+									<p><a class="btn btn-primary btn-sm" href="#addModule" data-toggle="modal" id="btnAddModule">+ {{Lang::get('caption.link.button.add_mod')}}</a></p>
 								@endif
 								</div>
 								<div id="eventSection">				 						
@@ -259,8 +257,8 @@
 
 		$('.btnModuleDetail').click(function(){
 			var tr = $(this).closest('tr');				
-			$moduleId = tr.find('.mId').val();
-			var url = '/module_detail?moduleId=' + $moduleId;
+			var moduleId = tr.find('.mId').val();
+			var url = '/module_detail?moduleId=' + moduleId;
 			$(this).attr('href', url);	
 			$(this).click();
 		});

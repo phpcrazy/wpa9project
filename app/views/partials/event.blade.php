@@ -1,4 +1,4 @@
-		<h4 class="red_text">Events on {{$projects[0]->project}}</h4>
+		<h4 class="red_text">{{Lang::get('caption.title.project_detail.event')}} on {{$para['project']->project}}</h4>
 		<table class="table table-hover">
 		 <thead>
 			<tr>
@@ -21,7 +21,7 @@
 	</table>		
 	{{ $links->links();}}																
 	<div class='perPage'>
-	{{ Form::text('perPage', $limit, array("class"=>'form-control','id'=>'txtPerPage'
+	{{ Form::text(Lang::get('caption.label.detail.per_page'), $limit, array("class"=>'form-control','id'=>'txtPerPage'
 	)) }}
 	</div>
 	<div class='perPage'>

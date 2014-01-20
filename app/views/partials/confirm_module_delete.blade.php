@@ -6,7 +6,7 @@
 					<div id="panel_wrapper" class="col-md-12">					
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-							    <h3 class="panel-title">Confirm Module Delete</h3>
+							    <h3 class="panel-title">{{Lang::get('caption.title.confirm_module_delete')}}</h3>
 							</div>
 							<div class="panel-body">
 								{{ Form::open(array(
@@ -20,11 +20,11 @@
 								)) }}		
 								{{ Form::hidden('moduleId',0, array("class" => 'form-control','id'=>'txtModuleId'
 								)) }}				 		
-						 		<h3 class="text-danger">You are about to delete this module. Are you sure you want to do this?</h3></div>								
+						 		<h3 class="text-danger">{{Lang::get('caption.label.confirm_module_delete')}}</h3></div>								
 								<div id="btn">
 									<input type="submit" id="btnSubmit" class='hide'>
-									<a class="btn btn-danger" id="btnYes">Yes</a>
-									<a class="btn btn-default" id="btnNo">No</a>
+									<a class="btn btn-danger" id="btnYes">Lang::get('caption.link.button.yes')</a>
+									<a class="btn btn-default" id="btnNo">Lang::get('caption.link.button.no')</a>
 								</div>
 								{{ Form::close() }}
 							</div>			

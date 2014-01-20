@@ -182,11 +182,19 @@ class TaskController extends BaseController{
 		else
 			$num = Input::get('num');
 
+		$para["member"] = DB::select("Select Member.memberId, Member.member from Member left join 
+			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
+			on users.id = users_groups.user_id) on Member.memberId = users.memberId 
+			where Member.orgId = ? and groups.name = 'Member' order by users_groups.group_id",array(Session::get('orgId')));
+
+		$para["priority"] = Priority::select('Priority.priorityId', 'Priority.priority')->get();
+
+
 		if(Input::get('projectId')==null){
 			if(count(Project::where('authorizedBy',Session::get('memberId'))
 				->whereNotIn('status',array('Finished','Cancel','Pending'))
 				->select('projectId')->orderBy('projectId')->get())==0)
-				return View::make('partials/workarea');		
+				return View::make('partials/workarea')->with(array('para'=>$para, 'num'=>$num));		
 			
 			$para["project"] = Project::where('authorizedBy',Session::get('memberId'))
 				->whereNotIn('status',array('Finished','Cancel','Pending'))
@@ -194,20 +202,35 @@ class TaskController extends BaseController{
 		}
 				
 		else
-			$para["project"] = array('projectId'=>Input::get('projectId')
-				,'project'=>Project::where('projectId',Input::get('projectId'))->pluck('project'));						
+			$para["project"] = Project::where('projectId',Input::get('projectId'))
+				->select('projectId','project')->get()[0];	
 
-		if(count(Module::where('projectId',$para["project"]["projectId"])
-			->where('active',1)->select('moduleId')->get())==0)
-			return View::make('partials/workarea')->with(array('para'=>$para));
+		$para['projects'] = Project::where('authorizedBy',Session::get('memberId'))
+				->whereNotIn('status',array('Finished','Cancel','Pending'))
+				->select('projectId','project')->orderBy('projectId')->get();
 
-		$para["module"] = Module::where('active',1)->where('projectId',$para["project"]["projectId"])->select('moduleId','module')->get()[0];		
+		if(count(Module::where('projectId',$para["project"]->projectId)
+			->where('active',1)->select('moduleId')->get())==0){
+				
+			if(Input::get('projectId')!=null)
+				return View::make('partials/tasklist_area')->with(array('para'=>$para, 'num'=>$num));
 
-		if(count(TaskList::where('moduleId',$para["module"]["moduleId"])->where('status','!=','Delete')
-			->select('tasklistId')->get())==0)
-			return View::make('partials/workarea')->with(array('para'=>$para));
+			return View::make('partials/workarea')->with(array('para'=>$para, 'num'=>$num));
+		}
 
-		$para["tasklist"] = TaskList::where('moduleId',$para["module"]["moduleId"])->where('status','!=','Delete')
+		$para["module"] = Module::where('active',1)
+			->where('projectId',$para["project"]->projectId)->select('moduleId','module')->get()[0];		
+
+
+		if(count(TaskList::where('moduleId',$para["module"]->moduleId)->where('status','!=','Delete')
+			->select('tasklistId')->get())==0){
+
+			if(Input::get('projectId')!=null)
+				return View::make('partials/tasklist_area')->with(array('para'=>$para, 'num'=>$num));
+
+			return View::make('partials/workarea')->with(array('para'=>$para, 'num'=>$num));
+		}
+		$para["tasklist"] = TaskList::where('moduleId',$para["module"]->moduleId)->where('status','!=','Delete')
 						->select('tasklistId','tasklist')->orderBy('tasklistId')->get();		
 
 		$i=0;
@@ -221,12 +244,8 @@ class TaskController extends BaseController{
 			$i++;
 		}
 
-		$para["member"] = DB::select("Select Member.memberId, Member.member from Member left join 
-			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
-			on users.id = users_groups.user_id) on Member.memberId = users.memberId 
-			where Member.orgId = ? and groups.name = 'Member' order by users_groups.group_id",array(Session::get('orgId')));
-
-		$para["priority"] = Priority::select('Priority.priorityId', 'Priority.priority')->get();
+		if(Input::get('projectId') != null && Input::get('source') == null)
+			return View::make('partials/tasklist_area')->with(array('para'=>$para, 'num'=>$num));	
 
 		if(Input::get('source')=='task_detail')
 			return View::make('partials/task_detail')->with(array('para'=>$para, 'num'=>$num));	

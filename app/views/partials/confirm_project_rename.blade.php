@@ -6,13 +6,13 @@
 					<div id="panel_wrapper" class="col-md-12">					
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-							    <h3 class="panel-title">Confirm Project Rename</h3>
+							    <h3 class="panel-title">{{Lang::get('caption.title.confirm_project_rename')}}</h3>
 							</div>
 							<div class="panel-body">										 		
-						 		<h3 class="text-danger">You are about to rename the project. Are you sure you want to do this?</h3></div>						   								   											
+						 		<h3 class="text-danger">{{Lang::get('caption.label.confirm_project_rename')}}</h3></div>						   								   											
 								<div id="btn">
-									<a class="btn btn-danger" id="btnYes">Yes</a>
-									<a class="btn btn-default" id="btnNo">No</a>
+									<a class="btn btn-danger" id="btnYes">Lang::get('caption.link.button.yes')</a>
+									<a class="btn btn-default" id="btnNo">Lang::get('caption.link.button.no')</a>
 								</div>
 							</div>			
 						</div> <!--- end of panel_wrapper -->					

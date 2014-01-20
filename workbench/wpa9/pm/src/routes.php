@@ -1,7 +1,7 @@
 <?php
 
 Route::any('bench', function(){
-		return 'Bench reach';
+		return Config::get('pm::app.abc');
 	});
 
 ?>

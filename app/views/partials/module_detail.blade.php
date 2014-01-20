@@ -28,7 +28,7 @@
 					
 						<div class="panel panel-primary">
 						  	<div class="panel-heading">
-						    	<h3 class="panel-title">Details of Module</h3>
+						    	<h3 class="panel-title">{{Lang::get('caption.title.module_detail.main')}}</h3>
 						  	</div>
 						  	<div class="panel-body">
 						  	<div id="moduleSection">
@@ -39,7 +39,7 @@
 								'class'			=> 'form-horizontal'
 								))
 							}}		
-							{{ Form::hidden('moduleId',$modules[0]->moduleId, array("class" => 'form-control', 'id' => 'txtModuleId'
+							{{ Form::hidden('moduleId',$para['module']->moduleId, array("class" => 'form-control', 'id' => 'txtModuleId'
 							)) }}
 							{{ Form::hidden('key','', array("class" => 'form-control', 'id' => 'txtKey'
 							)) }}	
@@ -48,25 +48,25 @@
 							{{ Form::submit('Submit', array('class' => 'btn btn-default hide', 'id'=>'btnSubmit')) }}
 							{{ Form::close() }}	 
 						 	<h4>
-					 			<span class="red_text lblHide">{{$modules[0]->module}}</span>
-								{{ Form::text('module', $modules[0]->module, array("class" => 'form-control txtShow')) 
+					 			<span class="red_text lblHide">{{$para['module']->module}}</span>
+								{{ Form::text('module', $para['module']->module, array("class" => 'form-control txtShow')) 
 								}}
 					 		</h4>
 					 		<?php
-								if($modules[0]->desc==null)$desc='&nbsp;';
-								else $desc=$modules[0]->desc;
+								if($para['module']->desc==null)$desc = '&nbsp;';
+								else $desc = $para['module']->desc;
 							?>
-						 	<p class="row"><span class="col-md-2 text-right"><strong>Descripion : </strong></span><span class="col-md-10 text-left lblHide">{{$desc}}</span>						 	
-						 	{{ Form::text('desc', $modules[0]->desc, array("class" => 'form-control txtShow')) 
+						 	<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.desc')}} : </strong></span><span class="col-md-10 text-left lblHide">{{$desc}}</span>						 	
+						 	{{ Form::text('desc', $para['module']->desc, array("class" => 'form-control txtShow')) 
 							}}
 							</p>
 						 		<?php 
-									$sdate = date_create($modules[0]->startDate);
+									$sdate = date_create($para['module']->startDate);
 									$sdate = $sdate->format('d-F-Y');
-									$ddate = date_create($modules[0]->dueDate);
+									$ddate = date_create($para['module']->dueDate);
 									$ddate = $ddate->format('d-F-Y');									
 								?>
-							<p class="row"><span class="col-md-2 text-right"><strong>Started date : </strong></span><span class="col-md-10 text-left lblHide">{{$sdate}}</span>
+							<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.s_date')}} : </strong></span><span class="col-md-10 text-left lblHide">{{$sdate}}</span>
 							{{ Form::text('startDate',$sdate,
 						  		array("class"=>'form-control date_picker txtShow',
 						  			   "data-date-format"=>'dd-MM-yyyy', 
@@ -74,7 +74,7 @@
 						  			   "id" => "startDate", 'readonly'))
 							}}
 							</p>
-							<p class="row"><span class="col-md-2 text-right"><strong>Due date : </strong></span><span class="col-md-10 text-left lblHide">{{$ddate}}</span>
+							<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.d_date')}} : </strong></span><span class="col-md-10 text-left lblHide">{{$ddate}}</span>
 							{{ Form::text('dueDate',$ddate,
 						  		array("class"=>'form-control date_picker txtShow',
 						  			   "data-date-format"=>'dd-MM-yyyy', 
@@ -82,28 +82,28 @@
 						  			   "id" => "dueDate", 'readonly'))
 							}}
 							</p>
-							<p class="row"><span class="col-md-2 text-right"><strong>Status : </strong></span><span class="text-left lblStatus label">{{$modules[0]->status}}</span></p>
+							<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.status')}} : </strong></span><span class="text-left lblStatus label">{{$para['module']->status}}</span></p>
 							<?php
-								 if($modules[0]->progress==null) $progress = '0%';
-								 else $progress = $modules[0]->progress;
+								 if($para['module']->progress==null) $progress = '0%';
+								 else $progress = $para['module']->progress;
 							?>
-							<p class="row"><span class="col-md-2 text-right"><strong>Progress : </strong></span><span class="text-left">{{$progress}}</span></p>
+							<p class="row"><span class="col-md-2 text-right"><strong>{{Lang::get('caption.label.detail.progress')}} : </strong></span><span class="text-left">{{$progress}}</span></p>
 							
-							<h4 class="red_text">Tasklists on {{$modules[0]->module}}</h4>
+							<h4 class="red_text">{{Lang::get('caption.title.module_detail.tasklist_area')}} on {{$para['module']->module}}</h4>
 							</div>
 							<div id="tasklistSection">			  											
 		  						<table class="table table-hover">
 
 									<thead>
 										<tr>
-											<th><i class="glyphicon glyphicon-list"></i> TaskList Name</th>
-											<th><i class="glyphicon glyphicon-calendar"></i> Due Date </th>
-											<th><i class="glyphicon glyphicon-stats"></i> Progress</th>
-											<th><i class="glyphicon glyphicon-wrench"></i> Action</th>
+											<th><i class="glyphicon glyphicon-list"></i> {{Lang::get('caption.label.detail.tasklist_name')}}</th>
+											<th><i class="glyphicon glyphicon-calendar"></i> {{Lang::get('caption.label.detail.status')}}</th>
+											<th><i class="glyphicon glyphicon-stats"></i> {{Lang::get('caption.label.detail.progress')}}</th>
+											<th><i class="glyphicon glyphicon-wrench"></i> {{Lang::get('caption.label.detail.action')}}</th>
 										</tr>
 									</thead>
 									<tbody>																
-										@foreach($tasklists as $tasklist)
+										@foreach($para['tasklist'] as $tasklist)
 										<tr>											
 											<?php
 												$date = date_create($tasklist->dueDate);
@@ -121,7 +121,7 @@
 											?>
 											<td>{{$progress}}</td>
 											<td class='buttonGroup'>
-												@if(Session::get('memberId')==$modules[0]->authorizedBy&&$modules[0]->status!="Cancel"&&$modules[0]->status!="Pending")
+												@if(Session::get('memberId') == $para['module']->authorizedBy && $para['module']->status!="Cancel" && $para['module']->status!="Pending")
 													<a class="btn btn-danger btn-sm btnTaskListDelete" data-content="delete tasklist" data-trigger="hover" data-toggle="popover" data-placement="top" >
 														<span class="glyphicon glyphicon-trash"></span>												
 													</a>
@@ -132,8 +132,8 @@
 									</tbody>
 								</table>
 							</div>
-								@if(Session::get('memberId')==$modules[0]->authorizedBy&&$modules[0]->status!="Cancel"&&$modules[0]->status!="Pending")
-									<p><a class="btn btn-primary btn-sm" href="#addTasklist" data-toggle="modal" id="btnAddTaskList">+ Add New Tasklist</a></p>			 					
+								@if(Session::get('memberId') == $para['module']->authorizedBy && $para['module']->status!="Cancel" && $para['module']->status!="Pending")
+									<p><a class="btn btn-primary btn-sm" href="#addTasklist" data-toggle="modal" id="btnAddTaskList">+ {{Lang::get('caption.link.button.add_tasklist')}}</a></p>			 					
 								@endif
 							</div>
 						</div> <!--- end of panel_wrapper -->

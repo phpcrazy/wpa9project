@@ -61,7 +61,7 @@ class ProjectController extends BaseController{
 	}
 
 	public function project_list() {			
-		$projects = DB::select(
+		$para['project'] = DB::select(
 "select Mdule.projectId, Mdule.project, Mdule.desc, Mdule.startDate,Mdule.dueDate
     , Mdule.status, Mdule.member, Mdule.client, concat(sum(progress)/count(1), '%') progress from(
 	select Project.projectId, Project.project, Project.desc, Project.startDate,Project.dueDate
@@ -88,17 +88,17 @@ class ProjectController extends BaseController{
 	on TaskList.tasklistId = Progress.tasklistId where Project.orgId = ? group by Module.moduleId )
 	 Mdule group by Mdule.projectId", array(Session::get('orgId')));		
 		
-		$clients = Client::where('Client.orgId',Session::get('orgId'))
+		$para['client'] = Client::where('Client.orgId',Session::get('orgId'))
 					->Select('Client.clientId', 'Client.client')->get();
 
-		$members = DB::select('Select Member.memberId, Member.member from Member left join 
+		$para['member'] = DB::select('Select Member.memberId, Member.member from Member left join 
 			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
 			on users.id = users_groups.user_id) on Member.memberId = users.memberId 
 			where Member.orgId = ? and groups.name <> "Member" order by users_groups.group_id',array(Session::get('orgId')));
 		
-		$org = Organization::where('orgId', Session::get('orgId'))->pluck('org');	
+		$para['org'] = Organization::where('orgId', Session::get('orgId'))->pluck('org');	
 
-		return View::make('partials/project_list')->with(array('projects'=>$projects, 'members'=>$members, 'org'=>$org, 'clients'=> $clients));						
+		return View::make('partials/project_list')->with(array('para'=>$para));						
 	}
 
 	public function project_authority_change() {		
@@ -190,7 +190,7 @@ class ProjectController extends BaseController{
 
 		Session::put('projectId',$projectId);
 
-		$projects = DB::select(
+		$para['project'] = DB::select(
 "select Mdule.projectId, Mdule.project, Mdule.desc, Mdule.startDate,Mdule.dueDate
     , Mdule.status, Mdule.member, Mdule.client, concat(sum(progress)/count(1), '%') progress from(
 	select Project.projectId, Project.project, Project.desc, Project.startDate,Project.dueDate
@@ -216,9 +216,9 @@ class ProjectController extends BaseController{
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress
 	on TaskList.tasklistId = Progress.tasklistId where Project.projectId = ? group by Module.moduleId )
-	 Mdule group by Mdule.projectId", array($projectId));						
+	 Mdule group by Mdule.projectId", array($projectId))[0];						
 
-		$modules = DB::select(
+		$para['module'] = DB::select(
 	"select Module.moduleId, Module.module, Module.desc, Module.startDate, Module.dueDate
 		, Module.status, Project.authorizedBy, concat(sum(Progress.progress)/count(Module.moduleId), '%') progress, Module.active from Module
 	left join Project on Module.projectId = Project.projectId 
@@ -310,10 +310,10 @@ on TaskList.tasklistId = Progress.tasklistId where Project.projectId = ? and Mod
 		}
 
 		if(Input::get('limit')!=null)
-			return View::make('partials/event')->with(array('projects'=> $projects, 'modules'=>$modules, 'events'=>$paginator[$page], 'links'=> $links, 'limit'=> $limit));	
+			return View::make('partials/event')->with(array('para'=> $para, 'events'=>$paginator[$page], 'links'=> $links, 'limit'=> $limit));	
 		
 		else
-			return View::make('partials/project_detail')->with(array('projects'=> $projects, 'modules'=>$modules, 'events'=>$paginator[$page], 'links'=> $links, 'limit'=> $limit));			
+			return View::make('partials/project_detail')->with(array('para'=> $para, 'events'=>$paginator[$page], 'links'=> $links, 'limit'=> $limit));			
 	}
 
 	public function project_update() {		

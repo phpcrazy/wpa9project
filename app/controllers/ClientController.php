@@ -9,8 +9,6 @@ class ClientController extends BaseController {
 			return Redirect::route('home')->withInput()->withErrors($validator);	
 		}
 
-		Session::put('orgId',1);
-
 		$client=array(
 			'orgId'		=>	Session::get('orgId'),
 			'client'	=>	trim(Input::get('clientname')), 

@@ -3,14 +3,20 @@
 class TaskListController extends BaseController{
 	public function TaskList_add(){		
 		$moduleId = Input::get('moduleId');
-		$url = '/module_detail/?moduleId=' . $moduleId . '#moduleSection';	
+
+		if(Input::get('source')=='workarea'){
+			$url = 'workarea/?projectId=' . Input::get('projectId') . '&source="add_Tasklist"';	
+		}
+
+		else if(Input::get('source')=='module_detail')
+			$url = '/module_detail/?moduleId=' . $moduleId . '#moduleSection';					
 
 		$validator = Validator::make(Input::all(), Config::get('validation.tasklist'));
 
 		if ($validator->fails()){					
 			return Redirect::to($url)->withInput()->withErrors($validator);	
 		}
-				
+		
         $startDate 		  = date_create(Input::get('startDate'));
         $dueDate	 	  = date_create(Input::get('dueDate'));
 

@@ -6,7 +6,7 @@
 					<div id="panel_wrapper" class="col-md-12">					
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-							    <h3 class="panel-title">Confirm Project Deactivation</h3>
+							    <h3 class="panel-title">{{Lang::get('caption.title.confirm_project_delete')}}</h3>
 							</div>
 							<div class="panel-body">	
 							{{ Form::open(array(
@@ -20,10 +20,10 @@
 							)) }}		
 							{{ Form::submit('Submit', array('class' => 'btn btn-default', 'id'=>'btnSubmit')) }}
 							{{ Form::close() }} 		
-						 		<h3 class="text-danger">You are about to delete this project. The project will be available for view only in the future. You can not change back the project to be active again.</h3></div>
+						 		<h3 class="text-danger">{{Lang::get('caption.label.confirm_project_delete')}}</h3></div>
 								<div id="btn">
-									<a class="btn btn-danger" id="btnYes">Yes</a>
-									<a class="btn btn-default" id="btnNo">No</a>
+									<a class="btn btn-danger" id="btnYes">Lang::get('caption.link.button.yes')</a>
+									<a class="btn btn-default" id="btnNo">Lang::get('caption.link.button.no')</a>
 								</div>
 							
 							</div>			

@@ -1,5 +1,13 @@
 <?php 
 
+/*
+	Author		 = Sat Kyar
+	StartDate 	 = 28 Dec 2013
+	ModifiedDate = 16 Jan 2014
+	Purpose		 = For Authentication, Registration of user
+	Remark
+*/
+
 class MemberController extends BaseController {
 
 	public function member_add(){			
@@ -21,7 +29,7 @@ class MemberController extends BaseController {
 
 			catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
 			{
-				return Redirect::route('member_list')->withErrors(array('profile' => 'Photo size should not exceed more than 2mb.'));
+				return Redirect::route('member_list')->withInput()->withErrors(array('profile' => 'Photo size should not exceed more than 2mb.'));
 			}
 		}
 		else{					
@@ -46,21 +54,22 @@ class MemberController extends BaseController {
 		),true);
 
 		$memberGroup = Sentry::findGroupByName('Member');
-			$user->addGroup($memberGroup);
+		
+		$user->addGroup($memberGroup);
 
 		return Redirect::route('member_list');		
 	}		
 
 	public function member_list() {			
-		$members = DB::select('Select Member.memberId, Member.member, groups.name role, users.loginStatus from Member left join 
+		$para['member'] = DB::select('Select Member.memberId, Member.member, groups.name role, users.loginStatus from Member left join 
 			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
 			on users.id = users_groups.user_id) on Member.memberId = users.memberId where Member.orgId = ? order by users_groups.group_id',array(Session::get('orgId')));
 
-		$tasks = Task::where('orgId',Session::get('orgId'))->Select('task','assignTo','statusId')->join('TaskDetail', 'Task.taskId', '=', 'TaskDetail.taskId')->get();
+		$para['task'] = Task::where('orgId',Session::get('orgId'))->Select('task','assignTo','statusId')->join('TaskDetail', 'Task.taskId', '=', 'TaskDetail.taskId')->get();
 
-		$roles = Role::select('name as role','id')->orderBy('id')->get();
+		$para['role'] = Role::select('name as role','id')->orderBy('id')->get();
 		
-		return View::make('partials/member_list')->with(array('members'=>$members, 'tasks'=>$tasks, 'roles'=>$roles));					
+		return View::make('partials/member_list')->with(array('para'=>$para));					
 
 	}
 
@@ -100,13 +109,13 @@ class MemberController extends BaseController {
 		else
 			$memberId = Input::old('memberId');
 
-		$member = DB::select('Select Member.memberId, Member.member, Member.address, Member.phone, Member.photoPath, users.username, users.email, users.created_at, groups.name role from Member left join 
+		$para['member'] = DB::select('Select Member.memberId, Member.member, Member.address, Member.phone, Member.photoPath, users.username, users.email, users.created_at, groups.name role from Member left join 
 			( users left join ( users_groups join groups on users_groups.group_id = groups.id ) 
-			on users.id = users_groups.user_id) on Member.memberId = users.memberId where Member.memberId = ?',array($memberId));		
+			on users.id = users_groups.user_id) on Member.memberId = users.memberId where Member.memberId = ?',array($memberId))[0];		
 
-		$members = DB::select('Select Member.memberId, Member.member from Member where Member.orgId = ?',array(Session::get('orgId')));
+		$para['members'] = DB::select('Select Member.memberId, Member.member from Member where Member.orgId = ?',array(Session::get('orgId')));
 
-		return View::make('partials/member_detail')->with(array('members'=> $members,'member'=>$member));
+		return View::make('partials/member_detail')->with(array('para'=> $para));
 	}
 
 	public function member_update() {

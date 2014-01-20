@@ -114,7 +114,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Cartalyst\Sentry\SentryServiceProvider',
-		// 'Wpa9\Pm\PmServiceProvider',
+		'Wpa9\Pm\PmServiceProvider',
 	),
 
 	/*

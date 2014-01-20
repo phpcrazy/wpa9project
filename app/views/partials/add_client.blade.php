@@ -1,95 +1,92 @@
-@section('add_client')
-      
-	<div class="container">
-		<div id="add_client" class="col-md-4 col-md-offset-4 form_wrapper m-form">		
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>	
+<!--
+	Author		 = Sat Kyar
+	StartDate 	 = 28 Dec 2013
+	ModifiedDate = 14 Jan 2014
+	Purpose	 = To add client
+	Remark
+		0 Validating phone to only numeric => js.ValidateNumber in phone field
+-->
+
+@section('add_client')     
+
+	<div class='container'>
+		<div id='add_client' class='col-md-4 col-md-offset-4 form_wrapper m-form'>		
+			<button type='button' class='close' data-dismiss='modal'
+			 aria-hidden='true'>&times;</button>	
 			{{ Form::open(array(
 					'method' 		=> 'post',
 					'route'		    => 'add_client',
 					'autocomplete'	=> 'off',
-					'class'			=> 'form-horizontal'
-				))
+					'class'			=> 'form-horizontal' ))
 			}}			
-				<h5 class="heading">Client Registration Form</h5>			 	
-			 	 <div class="input-group">		 	 	  
-					<span class='place'>*</span><span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>					
-					<input type="text" class="form-control" placeholder="Full Name or Company Name" name="clientname" value="{{Input::old('clientname')}}">
-				</div>
-				<p class="error_msg">
-					@if($errors->has('clientname'))
-						@foreach($errors->get('clientname') as $name)
-							{{ $name }}
-						@endforeach
-					@endif
+			<h5 class='heading'>{{Lang::get('caption.title.add_client')}}</h5>			 	
+		 	 <div class='input-group'>		 	 	  
+				<span class='place'>*</span>
+				<span class='input-group-addon'><span class='glyphicon glyphicon-user'></span></span>					
+				{{ Form::text('email', Input::old('clientname'),
+					array('class'		=> 'form-control',
+						  'placeholder'	=> Lang::get('caption.label.add_client.clientname'),
+						  'name'		=> 'clientname'	)) 
+				}}					
+			</div>
+			<p class='error_msg'>
+				@if($errors->has('clientname'))
+					{{ $errors->get('clientname')[0];}}						
+				@endif
+			</p>
+
+			<div class='input-group'>
+				<span class='place'>*</span>
+				<span class='input-group-addon'><span class='glyphicon glyphicon-envelope'></span></span>
+				{{ Form::text('email', Input::old('email'),
+					array('class'		=> 'form-control',
+						  'placeholder'	=> 	Lang::get('caption.label.add_client.email'))) 
+				}}
+			</div>
+			<p class='error_msg'>
+				@if($errors->has('email'))
+					{{ $errors->get('email')[0];}}				
+				@endif
+			</p>
+
+			<div class='input-group'>
+				<span class='place'>*</span>
+				<span class='input-group-addon'><span class='glyphicon glyphicon-lock'></span></span>
+				{{ Form::password('password',
+					array('class' => 'form-control inputPassword',
+						  'placeholder' =>  Lang::get('caption.label.add_client.pass'))) 
+				}}
+			</div>
+			<p class='error_msg'>
+				@if($errors->has('password'))
+					{{ $errors->get('password')[0];}}		
+				@endif
+			</p>
+
+			<div class='input-group'>
+				<span class='place'>&nbsp;&nbsp;</span>
+				<span class='input-group-addon'><span class='glyphicon glyphicon-home'></span></span>
+			  	{{ Form::text('address', Input::old('address'), 
+			  		array('class' => 'form-control',
+			  			  'placeholder' =>  Lang::get('caption.label.add_client.add'))) 
+			  	}}
+			</div>
+
+			<div class='input-group'>
+			  	<span class='place'>&nbsp;&nbsp;</span>
+			  	<span class='input-group-addon'><span class='glyphicon glyphicon-phone'></span></span>
+			  	{{ Form::text('phone', Input::old('phone'), 
+			  		array('class' => 'form-control',
+			  		  	  'placeholder' => Lang::get('caption.label.add_client.ph'), 
+			  		  	  'onkeydown'=>	'validateNumber(event)' )) 
+			  	}}					  
+			</div>
+					  
+			<div id='btn' class='col-md-12'>		    	
+				<p>
+					{{ Form::submit(Lang::get('caption.link.button.register'), array('class' => 'btn btn-default', 'id' => 'btnSubmit')) }}	
 				</p>
-
-				<div class="input-group">
-					  <span class='place'>*</span><span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-					  <input type="text" class="form-control" placeholder="Email Address" name="email" value="{{Input::old('email')}}">
-				</div>
-				<p class="error_msg">
-					@if($errors->has('email'))
-						@foreach($errors->get('email') as $email_errors)
-							{{ $email_errors }}
-						@endforeach
-					@endif
-				</p>
-
-				<div class="input-group">
-					  <span class='place'>*</span><span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					  <input type="password" class="form-control" placeholder="Password" name="password">
-				</div>
-				<p class="error_msg">
-					@if($errors->has('password'))
-						@foreach($errors->get('password') as $password_errors)
-							{{ $password_errors }}
-						@endforeach
-					@endif
-				</p>
-
-				<div class="input-group">
-					  <span class="place">&nbsp;&nbsp;</span><span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
-					  <input type="text" class="form-control" placeholder="Address" name="address" value="{{Input::old('address')}}">
-				</div>
-
-				<div class="input-group">
-					  <span class="place">&nbsp;&nbsp;</span><span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
-					  <input type="text" class="form-control" onkeydown="validateNumber(event)" placeholder="Phone" name="phone" value="{{Input::old('phone')}}">
-				</div>
-				<script>
-					function validateNumber(evt) {
-					    var e = evt || window.event;
-					    var key = e.keyCode || e.which;
-
-					    if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
-					    // numbers   
-					    key >= 48 && key <= 57 ||
-					    // Numeric keypad
-					    key >= 96 && key <= 105 ||
-					    // Backspace and Tab and Enter
-					    key == 8 || key == 9 || key == 13 ||
-					    // Home and End
-					    key == 35 || key == 36 ||
-					    // left and right arrows
-					    key == 37 || key == 39 ||
-					    // Del and Ins
-					    key == 46 || key == 45) {
-					        // input is VALID
-					    }
-					    else {
-					        // input is INVALID
-					        e.returnValue = false;
-					        if (e.preventDefault) e.preventDefault();
-					    }
-					}
-					// comma, period and minus, . on keypad  key == 190 || key == 188 || key == 109 || key == 110 ||
- 
-				</script>			  
-				<div id="btn" class="col-md-12">		    	
-					<p>
-						<input type="submit" class="btn btn-default" value="Create">
-					</p>
-			    </div>		    
+		    </div>		    
 			{{ Form::close() }}	
 		</div> <!--- end of form_wrapper  -->
 	</div>

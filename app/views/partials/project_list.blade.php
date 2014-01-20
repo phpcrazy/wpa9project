@@ -14,11 +14,11 @@
 				@include('partials.sidebar')
 			<div id="main_content" class="col-md-10">
 				<div class="row">
-					<div  id="panel_wrapper" class="col-md-12">
+					<div id="panel_wrapper" class="col-md-12">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span class="hide">Projects</span>
-								<h3 class="panel-title">Projects in {{ $org }}</h3>
+								<h3 class="panel-title">{{Lang::get('caption.title.project_list')}} in {{ $para['org'] }}</h3>
 							</div>
 							<div class="panel-body">
 							{{ Form::open(array(
@@ -37,21 +37,21 @@
 							{{ Form::submit('Submit', array('class' => 'btn btn-default', 'id'=>'btnSubmit')) }}
 							{{ Form::close() }}
 							<?php $k = 0;?>
-							@for($i=count($projects);$i>=1;$i=$i-2)								
+							@for($i=count($para['project']);$i>=1;$i=$i-2)								
 								<div class="row proj_line">
 								@for($j=0;$j<=1;$j++)																								
 									<div class="col-md-6 proj_block">									
 										<h4>
-										<a class="btnProjectDetail lblhide" href="{{route('project_detail')}}">{{$projects[$k]->project}}</a>
-										{{ Form::text('project', $projects[$k]->project, array("class" => 'col-md-2 form-control txtShow')) 
+										<a class="btnProjectDetail lblhide" href="{{route('project_detail')}}">{{$para['project'][$k]->project}}</a>
+										{{ Form::text('project', $para['project'][$k]->project, array("class" => 'col-md-2 form-control txtShow')) 
 										}}
 										&nbsp;&nbsp;-&nbsp;&nbsp;
-										{{ Form::hidden('pid', $projects[$k]->projectId, array("class" => 'pId'
+										{{ Form::hidden('pid', $para['project'][$k]->projectId, array("class" => 'pId'
 										)) }}
 										<select class="form-control cboClient" name="client">
 											<option>Please Choose</option>
-											@foreach($clients as $client)
-												@if($projects[$k]->client==$client->client)						
+											@foreach($para['client'] as $client)
+												@if($para['project'][$k]->client==$client->client)						
 													<option selected="true" value="{{ $client->clientId }}" disabled="true">{{ $client->client }}</option>		
 												@else
 													<option value="{{ $client->clientId }}">{{ $client->client }}</option>
@@ -59,57 +59,57 @@
 											@endforeach
 										</select>
 										<?php 
-											$sdate = date_create($projects[0]->startDate);
+											$sdate = date_create($para['project'][0]->startDate);
 											$sdate = $sdate->format('d-M-Y');
-											$ddate = date_create($projects[0]->dueDate);
+											$ddate = date_create($para['project'][0]->dueDate);
 											$ddate = $ddate->format('d-M-Y');
 										?>
-										<span class="hidClient">{{$projects[$k]->client}}</span></h4>
-										<p><strong>Descripion : </strong>{{$projects[$k]->desc}}</p>
-										<p><strong>Started date : </strong>{{$sdate}}</p>
-										<p><strong>Due date : </strong>{{$ddate}}</p>
-										<p><strong>Authorized by : </strong>
+										<span class="hidClient">{{$para['project'][$k]->client}}</span></h4>
+										<p><strong>{{Lang::get('caption.label.detail.desc')}} : </strong>{{$para['project'][$k]->desc}}</p>
+										<p><strong>{{Lang::get('caption.label.detail.s_date')}} : </strong>{{$sdate}}</p>
+										<p><strong>{{Lang::get('caption.label.detail.d_date')}} : </strong>{{$ddate}}</p>
+										<p><strong>{{Lang::get('caption.label.detail.a_by')}} : </strong>
 										&nbsp;<select class="form-control cboMember" name="member">
-											@foreach($members as $member)
-												@if($projects[$k]->member==$member->member)						
+											@foreach($para['member'] as $member)
+												@if($para['project'][$k]->member==$member->member)						
 													<option selected="true" value="{{ $member->memberId }}" disabled="true">{{ $member->member }}</option>		
 												@else
 													<option value="{{ $member->memberId }}">{{ $member->member }}</option>
 												@endif
 											@endforeach
 										</select>
-										<span class="lblMember">{{$projects[$k]->member}}</span></p>
-										<p><strong>Status : </strong> <span class="lblStatus label">{{$projects[$k]->status}}</span></p>
+										<span class="lblMember">{{$para['project'][$k]->member}}</span></p>
+										<p><strong>{{Lang::get('caption.label.detail.status')}} : </strong> <span class="lblStatus label">{{$para['project'][$k]->status}}</span></p>
 										<?php
-											 if($projects[$k]->progress==null) $progress = '0%';
-											 else $progress = $projects[$k]->progress;
+											 if($para['project'][$k]->progress==null) $progress = '0%';
+											 else $progress = $para['project'][$k]->progress;
 										?>
-										<p><strong>Progress : </strong>{{$progress}}</p>
-										@if($projects[$k]->status=="Finish")						
-											<?php $tmp = 'Archieve'; $btn = 'btnArchieve';?>
-										@elseif($projects[$k]->status != "Cancel")
-											<?php $tmp = 'Delete'; $btn = 'btnDelete';?>
+										<p><strong>{{Lang::get('caption.label.detail.progress')}} : </strong>{{$progress}}</p>
+										@if($para['project'][$k]->status=="Finish")						
+											<?php $tmp = Lang::get('caption.link.link.archieve'); $btn = 'btnArchieve';?>
+										@elseif($para['project'][$k]->status != "Cancel")
+											<?php $tmp = Lang::get('caption.link.link.delete'); $btn = 'btnDelete';?>
 										@else
 											<?php $tmp = ''; $btn = '';?>
 										
 										@endif
 										<div class='proj_options'>											
-											@if(Session::get('member')==$projects[$k]->member)
-												<a class="btnRename">Rename </a>
+											@if(Session::get('member') == $para['project'][$k]->member)
+												<a class="btnRename">{{Lang::get('caption.link.link.rename')}} </a>
 												@if(Session::get('role')==1 && $btn != '')		
 													<a class="{{$btn}}">{{$tmp}} </a>
 												@endif
-												@if($projects[$k]->status!="Finish"&&$projects[$k]->status!="Cancel"&&$projects[$k]->status!="Pending")
-													<a class="btnDeactivate">Deactivate </a>
-													<a class="btnAuthorityChange">Delegate To </a>
-												@elseif($projects[$k]->status=="Pending")
-													<a class="btnActivate">Activate </a>
+												@if($para['project'][$k]->status!="Finish" && $para['project'][$k]->status!="Cancel" && $para['project'][$k]->status!="Pending")
+													<a class="btnDeactivate">{{Lang::get('caption.link.link.deactivate')}} </a>
+													<a class="btnAuthorityChange">{{Lang::get('caption.link.link.delegate')}} </a>
+												@elseif($para['project'][$k]->status=="Pending")
+													<a class="btnActivate">{{Lang::get('caption.link.link.activate')}} </a>
 												@endif
 												<a class="btnClientChange">
-												@if($projects[$k]->client==Null)
-													Add Client 
+												@if($para['project'][$k]->client==Null)
+													{{Lang::get('caption.link.link.add_client')}} 
 												@else
-													Change Client
+													{{Lang::get('caption.link.link.ch_client')}}
 												@endif			
 												</a>																													
 											@else
@@ -120,7 +120,7 @@
 										</div>
 									</div>
 									<?php $k++;
-										if($k==count($projects))break; 
+										if($k==count($para['project']))break; 
 									?>
 								@endfor								
 								</div>

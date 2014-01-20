@@ -254,12 +254,12 @@ a.list-group-item:hover{
 	margin-top: 10px;
 }
 
-#register .input-controls:nth-child(7){
-	margin-top: 20px;
-}
-
 #register .error_msg{
 	text-indent: 30px;
+}
+
+#register #profilePhoto{
+	text-align: center;
 }
 
 #register #photo_warn{
@@ -518,12 +518,16 @@ a.list-group-item:hover{
 	padding-left: 20px;
 }
 
-#tasklist_detail #main_content{
-	width: 55%;
-}
-
 #tasklist_detail .panel-body p{
 	margin-bottom: 20px;
+}
+
+#tasklist_detail .panel-body p span{
+	width: 120px;
+}
+
+#tasklist_detail #main_content{
+	padding-right: 0;
 }
 
 #tasklist_detail .lblHide{
@@ -548,11 +552,6 @@ a.list-group-item:hover{
 	margin-bottom: 0;
 }
 
-#tasklist_detail #task_area{
-	padding-right: 0;
-	width: 28%;
-}
-
 #tasklist_detail #add_task .input-group{
 	margin: 20px 0 0 0;
 }
@@ -575,7 +574,7 @@ a.list-group-item:hover{
 }
 
 #tasklist_detail #add_task select.form-control{
-	width: 185px;
+	width: 172px;
 }
 
 #tasklist_detail #add_task .error_msg{
@@ -614,10 +613,6 @@ a.list-group-item:hover{
 	padding-left: 20px;
 }
 
-#workarea #main_content{
-	width: 55%;
-}
-
 #workarea h4{
   	margin-top: 0;
 	border-bottom: 0;
@@ -632,9 +627,20 @@ a.list-group-item:hover{
 	padding-right: 0;
 }
 
+#workarea #projectChoose{	
+	width: 200px;
+	float: right;
+}
+
+#workarea #cboProject{
+	/*float: right;*/
+}
+
+#workarea #addTaskList{
+	margin-top: 20px;
+}
+
 #workarea #task_area{
-	padding-right: 0;
-	width: 28%;
 	float: right;
 }
 
@@ -660,7 +666,7 @@ a.list-group-item:hover{
 }
 
 #workarea #add_task select.form-control{
-	width: 185px;
+	width: 172px;
 }
 
 #workarea #add_task .error_msg{

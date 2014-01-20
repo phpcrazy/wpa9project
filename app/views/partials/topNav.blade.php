@@ -21,15 +21,14 @@
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i  class="glyphicon glyphicon-cog"></i> Setting <b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="user_account.php">Account Setting</a></li>
-									<li><a href="member_entry.php">Member Setting</a></li>
-									<li><a href="organization.php">Organization Setting</a></li>
+									<li><a href="user_account.php">{{Lang::get('caption.link.top_nav.acc_setting')}}</a></li>
+									<li><a href="organization.php">{{Lang::get('caption.link.top_nav.org_setting')}}</a></li>
 
 								</ul>
 							</li>
 
 							<li>
-								<a href="{{route('logout')}}"><i  class="glyphicon glyphicon-off"></i> Log Out </a>
+								<a href="{{route('logout')}}"><i  class="glyphicon glyphicon-off"></i> {{Lang::get('caption.link.top_nav.logout')}}</a>
 							</li>
 						</ul>
 					</div><!-- /.navbar-collapse -->

@@ -190,9 +190,4 @@ Route::group(array('before' => 'auth|loginStatus'), function(){
 	));	
 });
 
-Route::any('test', function(){	
-
-	$module = Module::where('active',1)->where('projectId',1)->select('moduleId')->get();
-		var_dump($module->moduleId);
-
-});
+Route::any('test', 'TaskController@workarea');

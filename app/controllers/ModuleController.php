@@ -1,7 +1,7 @@
 <?php 
 
 class ModuleController extends BaseController{
-	public function module_add(){					
+	public function module_add(){	
 		$projectId = Input::get('projectId');
 		$url = '/project_detail/?projectId=' . $projectId . '#projectSection';	
 		
@@ -71,7 +71,7 @@ class ModuleController extends BaseController{
 
 		Session::put('moduleId',$moduleId);
 
-		$modules = DB::select(
+		$para['module'] = DB::select(
 		"select Module.moduleId, Module.module, Module.desc, Module.startDate, Module.dueDate
 			, Module.status, Project.authorizedBy, concat(sum(Progress.progress)/count(Module.moduleId), '%') progress from Module
 	left join Project on Module.projectId = Project.projectId 
@@ -91,9 +91,9 @@ class ModuleController extends BaseController{
 					 on Task.taskId = TaskDetail.taskId where Status.status != 'Delete' group by Task.tasklistId ) Lower 
 				on Upper.tasklistId = Lower.tasklistId
 		) Progress
-	on TaskList.tasklistId = Progress.tasklistId where Module.moduleId = ? group by Module.moduleId", array($moduleId));
+	on TaskList.tasklistId = Progress.tasklistId where Module.moduleId = ? group by Module.moduleId", array($moduleId))[0];
 		
-		$tasklists = DB::select(
+		$para['tasklist'] = DB::select(
 		"select TaskList.tasklistId, TaskList.tasklist, TaskList.desc, TaskList.startDate
 	, TaskList.dueDate, TaskList.status, Project.authorizedBy, Progress.progress from TaskList
 	left join 
@@ -116,7 +116,7 @@ class ModuleController extends BaseController{
 		) Progress 
 	on TaskList.tasklistId = Progress.tasklistId where Module.moduleId = ? and TaskList.status <> 'Delete'", array($moduleId));
 
-		return View::make('partials/module_detail')->with(array('modules'=> $modules, 'tasklists'=>$tasklists));
+		return View::make('partials/module_detail')->with(array('para'=> $para));
 	}
 
 	public function module_update() {
